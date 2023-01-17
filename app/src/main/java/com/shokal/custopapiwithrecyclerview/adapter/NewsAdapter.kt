@@ -27,12 +27,12 @@ class NewsAdapter(
     private val arrayList: ArrayList<Article>
 ): RecyclerView.Adapter<NewsAdapter.ItemViewHolder>() {
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val image = view.findViewById<ImageView>(R.id.imageView)
-        val title = view.findViewById<TextView>(R.id.newsTitle)
-        val description = view.findViewById<TextView>(R.id.newsDescription)
-        val autorName = view.findViewById<TextView>(R.id.authorName)
-        val date = view.findViewById<TextView>(R.id.date)
-        val newsCard = view.findViewById<CardView>(R.id.cardViewNews)
+        val image: ImageView = view.findViewById(R.id.imageView)
+        val title: TextView = view.findViewById(R.id.newsTitle)
+        val description: TextView = view.findViewById(R.id.newsDescription)
+        val authorName: TextView = view.findViewById(R.id.authorName)
+        val date: TextView = view.findViewById(R.id.date)
+        val newsCard: CardView = view.findViewById(R.id.cardViewNews)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -47,7 +47,9 @@ class NewsAdapter(
 
         holder.title.text = news.title!!
         holder.description.text = news.description!!
-        holder.autorName.text = news.author!!
+        news.author.let {
+            holder.authorName.text = it
+        }
         val localDate = LocalDate.parse("01-06-2022", DateTimeFormatter.ofPattern("MM-dd-yyyy"))
         if (localDate != null) {
             holder.date.text = localDate.toString()
@@ -60,7 +62,6 @@ class NewsAdapter(
             .centerCrop(1)
             .centerCrop()
             .into(holder.image)
-
 
         holder.newsCard.setOnClickListener {
 
