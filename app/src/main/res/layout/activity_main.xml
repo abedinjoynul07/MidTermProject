@@ -18,8 +18,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="#FFF"
+        app:tabIndicatorHeight="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewPagerHost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabMode="fixed" />
+
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPaperHost"
+        android:id="@+id/viewPagerHost"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
