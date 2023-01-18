@@ -33,18 +33,23 @@ class NewsFragment : Fragment() {
     private val internetPermissionCode = 100
     private lateinit var internetIcon: ImageView
     private lateinit var checkNetworkConnection: CheckNetworkConnection
+    private var _binding: FragmentNewsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentNewsBinding.inflate(inflater)
-        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
-        internetIcon = binding.statusImage
-        // Giving the binding access to the OverviewViewModel
-        //division()
+    ): View? {
+        // Inflate the layout for this fragment
+        _binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,11 +74,10 @@ class NewsFragment : Fragment() {
             checkNetworkConnection.observe(viewLifecycleOwner) { isConnected ->
                 if (isConnected) {
                     recyclerView.visibility = View.VISIBLE
-                    internetIcon.visibility = View.GONE
                     observeData()
                 } else {
                     recyclerView.visibility = View.GONE
-                    internetIcon.visibility = View.VISIBLE
+//                    internetIcon.visibility = View.VISIBLE
                 }
             }
         } else {

@@ -1,5 +1,6 @@
-package com.shokal.custopapiwithrecyclerview.models
+package com.shokal.custopapiwithrecyclerview.services
 
+import com.shokal.custopapiwithrecyclerview.models.News
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit

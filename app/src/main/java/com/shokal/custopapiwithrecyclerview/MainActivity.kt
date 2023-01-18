@@ -1,69 +1,63 @@
 package com.shokal.custopapiwithrecyclerview
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.Orientation
-import com.shokal.custopapiwithrecyclerview.adapter.ViewPagerAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.ActivityMainBinding
 import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment
-import com.shokal.custopapiwithrecyclerview.fragments.NewsFragment
+import com.shokal.custopapiwithrecyclerview.fragments.HomeFragment
+import timber.log.Timber
 
-class MainActivity : AppCompatActivity(), ViewPagerAdapter.ConditionViewPager {
+class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private var fragmentList : List<String> = listOf("Home", "Sports", "Technology")
+    private val internetPermissionCode = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupViewPager()
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        setupActionBarWithNavController(navController)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.homeFragment-> {
-                loadFragment(NewsFragment())
-                return true
+        checkPermission()
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.bookMarkFragment -> loadFragment(BookMarkFragment())
+                else -> loadFragment(HomeFragment())
             }
-            R.id.bookMarkFragment -> {
-                loadFragment(BookMarkFragment())
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
+            true
         }
     }
+
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment, fragment)
         transaction.commit()
     }
 
-    private fun setupViewPager() {
-        val viewPager = binding.viewPagerHost
 
-        viewPager.adapter = ViewPagerAdapter(fragmentList, this)
-        viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-    }
+    private fun checkPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.INTERNET
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.INTERNET),
+                internetPermissionCode
+            )
+        } else {
+            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT)
+                .show()
 
-    override fun condition(position: Int, fullSize: Int) {
-        Toast.makeText(this, "$position / $fullSize", Toast.LENGTH_SHORT).show()
-
+            Timber.d("Permission Already Granted")
+        }
     }
 
 }

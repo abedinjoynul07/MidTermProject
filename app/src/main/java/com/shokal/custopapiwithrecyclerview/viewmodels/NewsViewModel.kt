@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shokal.custopapiwithrecyclerview.BuildConfig
 import com.shokal.custopapiwithrecyclerview.models.Article
-import com.shokal.custopapiwithrecyclerview.models.NewsApi
+import com.shokal.custopapiwithrecyclerview.services.NewsApi
 import kotlinx.coroutines.launch
 
 enum class NewsApiStatus { LOADING, ERROR, DONE }

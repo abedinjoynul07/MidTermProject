@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/homeFragment2">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.shokal.custopapiwithrecyclerview.fragments.NewsFragment"
-        android:label="News"
-        tools:layout="@layout/fragment_news" />
     <fragment
         android:id="@+id/bookMarkFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment"
         android:label="fragment_book_mark"
         tools:layout="@layout/fragment_book_mark" />
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
