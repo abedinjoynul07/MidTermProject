@@ -2,24 +2,22 @@ package com.shokal.custopapiwithrecyclerview.viewmodels
 
 import android.app.Application
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
 import com.shokal.custopapiwithrecyclerview.BuildConfig
 import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.services.NewsApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 enum class NewsApiStatus { LOADING, ERROR, DONE }
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
+    private val result = mutableListOf<LocalArticle>()
     private val localViewModel: LocalNewsViewModel
     private val _status = MutableLiveData<NewsApiStatus>()
     val status: LiveData<NewsApiStatus> = _status
@@ -86,29 +84,45 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
-        //importDataToLocalDatabase()
+        importDataToLocalDatabase()
     }
 
-//    private fun importDataToLocalDatabase() {
-//        viewModelScope.launch {
-//            for (item in 0 until news.value!!.size) {
-//                Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-//                val article = LocalArticle(
-//                    0,
-//                    news.value?.get(item)?.author.toString(),
-//                    "all",
-//                    0,
-//                    news.value?.get(item)?.content.toString(),
-//                    news.value?.get(item)?.description.toString(),
-//                    news.value?.get(item)?.publishedAt.toString(),
-//                    news.value?.get(item)?.title.toString(),
-//                    news.value?.get(item)?.url.toString(),
-//                    news.value?.get(item)?.urlToImage.toString()
-//                )
-//                localViewModel.addArticle(article)
-//            }
-//        }
-//    }
+    private fun importDataToLocalDatabase() {
+        viewModelScope.launch {
+            try {
+                val response = NewsApi.retrofitService.getAllNews(BuildConfig.API_KEY, "*")
+                response.articles.map {
+                    result.add(
+                        LocalArticle(
+                            0,
+                            it.author,
+                            "all",
+                            0,
+                            it.content,
+                            it.description,
+                            it.publishedAt,
+                            it.title,
+                            it.url,
+                            it.urlToImage
+                        )
+                    )
+                }
+                addNews()
+//                Log.d("TAG", "getTopHeadlines: called ${result}")
+            } catch (e: Exception) {
+                Log.d("TAG", "$e")
+            }
+        }
+    }
+
+    private fun addNews() {
+        for (i in result) {
+            viewModelScope.launch(Dispatchers.IO) {
+                localViewModel.addArticle(i)
+            }
+        }
+        Log.d("TAG", "addNews: called ")
+    }
 
 //    private suspend fun getBitmap(imageLink: String): Bitmap {
 //        val loading = ImageLoader(context)
@@ -116,4 +130,6 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 //        val result = (loading.execute(request) as SuccessResult).drawable
 //        return (result as BitmapDrawable).bitmap
 //    }
+
+
 }
