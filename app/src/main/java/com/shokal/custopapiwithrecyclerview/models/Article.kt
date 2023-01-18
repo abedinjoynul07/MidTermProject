@@ -1,5 +1,8 @@
 package com.shokal.custopapiwithrecyclerview.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 data class Article(
     val author: String?,
     val content: String?,

@@ -1,34 +1,28 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.shokal.custopapiwithrecyclerview.R
+import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
+import com.shokal.custopapiwithrecyclerview.databinding.FragmentNewsBinding
+import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.networks.CheckNetworkConnection
+import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TechnologyFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TechnologyFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private val viewModel: NewsViewModel by viewModels()
+    private var _binding: FragmentNewsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +32,37 @@ class TechnologyFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_technology, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TechnologyFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TechnologyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.photos_grid)
+        refreshLayout = view.findViewById(R.id.swipeLayout)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.isDrawingCacheEnabled = true
+        recyclerView.setItemViewCacheSize(900)
+        initializeAdapter()
+
+        refreshLayout.setOnRefreshListener {
+            initializeAdapter()
+            refreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun initializeAdapter() {
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.visibility = View.VISIBLE
+        observeData()
+    }
+    private fun observeData() {
+        viewModel.technologyNews.observe(viewLifecycleOwner) {
+            recyclerView.adapter = NewsAdapter(
+                requireContext(), viewModel, it as ArrayList<Article>
+            )
+        }
     }
 }

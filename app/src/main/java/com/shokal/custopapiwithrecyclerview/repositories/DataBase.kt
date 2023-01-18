@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.shokal.custopapiwithrecyclerview.converters.ImageConverter
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
-@Database(entities = [LocalArticle::class, BookMarkNews::class], version = 2)
+@Database(entities = [LocalArticle::class, BookMarkNews::class], version = 7)
+@TypeConverters(ImageConverter::class)
 abstract class DataBase: RoomDatabase() {
     abstract fun newsDao(): NewsDao
 

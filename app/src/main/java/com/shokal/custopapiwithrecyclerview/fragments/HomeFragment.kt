@@ -1,12 +1,11 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
-import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.adapter.TabAdapter
 import com.shokal.custopapiwithrecyclerview.adapter.TabAdapter.Companion.tabList
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentHomeBinding

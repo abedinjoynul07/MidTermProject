@@ -3,6 +3,7 @@ package com.shokal.custopapiwithrecyclerview.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,7 @@ import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 import com.squareup.picasso.Picasso
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class NewsAdapter(
@@ -44,27 +43,52 @@ class NewsAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val news = arrayList[position]
-
-        holder.title.text = news.title!!
-        holder.description.text = news.description!!
-        news.author.let {
-            holder.authorName.text = it
+        
+        if (!TextUtils.isEmpty(news.title)){
+            holder.title.text = news.title
+        }else{
+            holder.title.text = "No Title!"
         }
+        
+        if (!TextUtils.isEmpty(news.description)){
+            holder.description.text = news.description
+        }else{
+            holder.description.text = "No Description!"
+        }
+
+        if (!TextUtils.isEmpty(news.author)){
+            holder.authorName.text = news.author
+        }else{
+            holder.authorName.text = "No Author!"
+        }
+
         val localDate = LocalDate.parse("01-06-2022", DateTimeFormatter.ofPattern("MM-dd-yyyy"))
         if (localDate != null) {
             holder.date.text = localDate.toString()
         }
-        Picasso.get()
-            .load(news.urlToImage)
-            .fit()
-            .placeholder(R.drawable.loading_animation)
-            .error(R.drawable.ic_connection_error)
-            .centerCrop(1)
-            .centerCrop()
-            .into(holder.image)
+
+        if (!TextUtils.isEmpty(news.urlToImage)){
+            Picasso.get()
+                .load(news.urlToImage)
+                .fit()
+                .placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_connection_error)
+                .centerCrop(1)
+                .centerCrop()
+                .into(holder.image)
+        }else {
+            Picasso.get()
+                .load(R.drawable.ic_connection_error)
+                .fit()
+                .placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_connection_error)
+                .centerCrop(1)
+                .centerCrop()
+                .into(holder.image)
+        }
 
         holder.newsCard.setOnClickListener {
-
+            Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
         }
     }
 

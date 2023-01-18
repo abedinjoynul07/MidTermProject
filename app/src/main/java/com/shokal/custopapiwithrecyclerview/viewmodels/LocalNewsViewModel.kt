@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.repositories.NewsRepository
 import kotlinx.coroutines.Dispatchers
@@ -19,9 +18,9 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
         newsList = newsRepo.getAllUsers()
     }
 
-    fun addUser(article: LocalArticle) {
+    fun addArticle(article: LocalArticle) {
         viewModelScope.launch(Dispatchers.IO) {
-            newsRepo.insertUser(article)
+            newsRepo.insertArticle(article)
         }
     }
 

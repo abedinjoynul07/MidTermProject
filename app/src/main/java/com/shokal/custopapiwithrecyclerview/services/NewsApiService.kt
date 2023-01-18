@@ -18,9 +18,27 @@ val retrofit: Retrofit = Retrofit.Builder()
 
 interface NewsApiService {
     @GET("everything")
-    suspend fun getNews(
+    suspend fun getAllNews(
         @Query("apiKey") apiKey: String,
         @Query("q") q: String,
+    ) : News
+
+    @GET("top-headlines")
+    suspend fun getBusinessNews(
+        @Query("apiKey") apiKey: String,
+        @Query("category") category: String,
+    ) : News
+
+    @GET("top-headlines")
+    suspend fun getSportsNews(
+        @Query("apiKey") apiKey: String,
+        @Query("category") category: String,
+    ) : News
+
+    @GET("top-headlines")
+    suspend fun getTechnologyNews(
+        @Query("apiKey") apiKey: String,
+        @Query("category") category: String,
     ) : News
 }
 

@@ -2,7 +2,6 @@ package com.shokal.custopapiwithrecyclerview.repositories
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
 class NewsRepository(context: Context) {
@@ -14,7 +13,7 @@ class NewsRepository(context: Context) {
     }
 
     // Insert new user
-    suspend fun insertUser(article: LocalArticle) {
+    suspend fun insertArticle(article: LocalArticle) {
         return db.insert(article)
     }
 
