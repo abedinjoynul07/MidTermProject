@@ -5,19 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.shokal.custopapiwithrecyclerview.adapter.TabAdapter
 import com.shokal.custopapiwithrecyclerview.adapter.TabAdapter.Companion.tabList
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentHomeBinding
+import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
+    private val viewmode: NewsViewModel by viewModels()
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -30,7 +33,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 //        Tab layout
         val tabLayout = binding.tabLayoutHome
         val viewPage = binding.viewPager2

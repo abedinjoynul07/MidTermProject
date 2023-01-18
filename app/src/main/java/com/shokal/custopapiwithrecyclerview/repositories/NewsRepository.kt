@@ -2,14 +2,27 @@ package com.shokal.custopapiwithrecyclerview.repositories
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
 class NewsRepository(context: Context) {
     private val db: NewsDao = DataBase.getDatabase(context).newsDao()
 
     private val localContext = context    //Fetch All the Users
-    fun getAllUsers(): LiveData<List<LocalArticle>> {
+    fun getAllNews(): LiveData<List<LocalArticle>> {
         return db.getAll()
+    }
+
+    fun getBusinessNews(): LiveData<List<LocalArticle>> {
+        return db.getAllBusiness()
+    }
+
+    fun getSportsNews(): LiveData<List<LocalArticle>> {
+        return db.getAllSports()
+    }
+
+    fun getTechnologyNews(): LiveData<List<LocalArticle>> {
+        return db.getAllTechnology()
     }
 
     // Insert new user
@@ -17,19 +30,13 @@ class NewsRepository(context: Context) {
         return db.insert(article)
     }
 
-    // Deleted all user
-    suspend fun deleteAllUser() {
-        db.deleteAll()
-    }
 
+    suspend fun insertAllArticle(article: List<LocalArticle>) {
+        return db.insertAll(article)
+    }
     // Delete user
     suspend fun deleteUser(article: LocalArticle) {
         db.delete(article)
     }
 
-
-    //Update User
-    suspend fun updateUser(article: LocalArticle) {
-        db.update(article)
-    }
 }

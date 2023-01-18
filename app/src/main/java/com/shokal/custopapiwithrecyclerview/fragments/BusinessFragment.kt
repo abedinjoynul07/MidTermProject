@@ -1,19 +1,10 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,16 +13,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentNewsBinding
-import com.shokal.custopapiwithrecyclerview.models.Article
-import com.shokal.custopapiwithrecyclerview.networks.CheckNetworkConnection
+import com.shokal.custopapiwithrecyclerview.models.LocalArticle
+import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
 class BusinessFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var refreshLayout: SwipeRefreshLayout
-    private val viewModel: NewsViewModel by viewModels()
+    private val viewModel: LocalNewsViewModel by viewModels()
+    private val apiViewModel: NewsViewModel by viewModels()
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
+    private val result = mutableListOf<LocalArticle>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -68,9 +61,28 @@ class BusinessFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.businessNews.observe(viewLifecycleOwner) {
+        apiViewModel.businessNews.observe(viewLifecycleOwner){
+            it.map {
+                result.add(
+                    LocalArticle(
+                        0,
+                        it.author,
+                        "all",
+                        0,
+                        it.content,
+                        it.description,
+                        it.publishedAt,
+                        it.title,
+                        it.url,
+                        it.urlToImage
+                    )
+                )
+            }
+            viewModel.addAllArticle(result)
+        }
+        viewModel.businesesNewsList.observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
-                requireContext(), viewModel, it as ArrayList<Article>
+                requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
         }
     }

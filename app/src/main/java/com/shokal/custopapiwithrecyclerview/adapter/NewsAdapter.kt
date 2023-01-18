@@ -15,6 +15,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.models.LocalArticle
+import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 import com.squareup.picasso.Picasso
 import java.time.LocalDate
@@ -22,8 +24,8 @@ import java.time.format.DateTimeFormatter
 
 class NewsAdapter(
     private val context: Context,
-    val viewModel: NewsViewModel,
-    private val arrayList: ArrayList<Article>
+    val viewModel: LocalNewsViewModel,
+    private val arrayList: ArrayList<LocalArticle>
 ): RecyclerView.Adapter<NewsAdapter.ItemViewHolder>() {
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.imageView)

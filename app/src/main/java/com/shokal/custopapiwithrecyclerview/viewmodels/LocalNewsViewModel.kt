@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.repositories.NewsRepository
 import kotlinx.coroutines.Dispatchers
@@ -11,12 +12,19 @@ import kotlinx.coroutines.launch
 
 class LocalNewsViewModel(application: Application) : AndroidViewModel(application) {
     var newsList: LiveData<List<LocalArticle>>
+    var businesesNewsList: LiveData<List<LocalArticle>>
+    var sportsNewsList: LiveData<List<LocalArticle>>
+    var technologyNewsList: LiveData<List<LocalArticle>>
     var newsRepo: NewsRepository
 
     init {
         newsRepo = NewsRepository(application)
-        newsList = newsRepo.getAllUsers()
+        newsList = newsRepo.getAllNews()
+        businesesNewsList = newsRepo.getBusinessNews()
+        sportsNewsList = newsRepo.getSportsNews()
+        technologyNewsList = newsRepo.getTechnologyNews()
     }
+
 
     fun addArticle(article: LocalArticle) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -24,21 +32,17 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    fun addAllArticle(article: List<LocalArticle>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            newsRepo.insertAllArticle(article)
+        }
+    }
+
+
+
     fun deleteUser(article: LocalArticle) {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepo.deleteUser(article)
-        }
-    }
-
-    fun deleteAllUser() {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsRepo.deleteAllUser()
-        }
-    }
-
-    fun updateUser(article: LocalArticle) {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsRepo.updateUser(article)
         }
     }
 }

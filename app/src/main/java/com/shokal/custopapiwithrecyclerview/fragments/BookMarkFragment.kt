@@ -13,13 +13,15 @@ import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentNewsBinding
 import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.models.LocalArticle
+import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
 class BookMarkFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var refreshLayout: SwipeRefreshLayout
-    private val viewModel: NewsViewModel by viewModels()
+    private val viewModel: LocalNewsViewModel by viewModels()
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
 
@@ -51,9 +53,9 @@ class BookMarkFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.businessNews.observe(viewLifecycleOwner) {
+        viewModel.newsList.observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
-                requireContext(), viewModel, it as ArrayList<Article>
+                requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
         }
     }

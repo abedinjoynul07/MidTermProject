@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.shokal.custopapiwithrecyclerview.BuildConfig
 import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
+import com.shokal.custopapiwithrecyclerview.models.News
 import com.shokal.custopapiwithrecyclerview.services.NewsApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,32 +47,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             _status.value = NewsApiStatus.LOADING
             try {
                 _news.value = NewsApi.retrofitService.getAllNews(BuildConfig.API_KEY, "*").articles
-
-//                for (item in 0 until news.value!!.size) {
-//                    Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-//                    val article = LocalArticle(
-//                        0,
-//                        news.value?.get(item)?.author.toString(),
-//                        "all",
-//                        0,
-//                        news.value?.get(item)?.content.toString(),
-//                        news.value?.get(item)?.description.toString(),
-//                        news.value?.get(item)?.publishedAt.toString(),
-//                        news.value?.get(item)?.title.toString(),
-//                        news.value?.get(item)?.url.toString(),
-//                        news.value?.get(item)?.urlToImage.toString()
-//                    )
-//                    localViewModel.addArticle(article)
-//                }
-
-                _businessNews.value = NewsApi.retrofitService.getBusinessNews(
-                    BuildConfig.API_KEY, "business"
-                ).articles
-                _sportsNews.value =
-                    NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "sports").articles
-                _technologyNews.value = NewsApi.retrofitService.getBusinessNews(
-                    BuildConfig.API_KEY, "technology"
-                ).articles
+                _businessNews.value = NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "business").articles
+                _sportsNews.value = NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "sports").articles
+                _technologyNews.value = NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "technology").articles
                 _status.value = NewsApiStatus.DONE
 
             } catch (e: Exception) {
@@ -84,45 +62,45 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
-        importDataToLocalDatabase()
+        //insertAllNews(news, "all")
     }
 
-    private fun importDataToLocalDatabase() {
-        viewModelScope.launch {
-            try {
-                val response = NewsApi.retrofitService.getAllNews(BuildConfig.API_KEY, "*")
-                response.articles.map {
-                    result.add(
-                        LocalArticle(
-                            0,
-                            it.author,
-                            "all",
-                            0,
-                            it.content,
-                            it.description,
-                            it.publishedAt,
-                            it.title,
-                            it.url,
-                            it.urlToImage
-                        )
-                    )
-                }
-                addNews()
-//                Log.d("TAG", "getTopHeadlines: called ${result}")
-            } catch (e: Exception) {
-                Log.d("TAG", "$e")
-            }
-        }
-    }
-
-    private fun addNews() {
-        for (i in result) {
-            viewModelScope.launch(Dispatchers.IO) {
-                localViewModel.addArticle(i)
-            }
-        }
-        Log.d("TAG", "addNews: called ")
-    }
+//    private fun insertAllNews(news: LiveData<List<Article>>, category: String) {
+//        viewModelScope.launch {
+//            try {
+//                val response = news
+//                response.articles.map {
+//                    result.add(
+//                        LocalArticle(
+//                            0,
+//                            it.author,
+//                            category,
+//                            0,
+//                            it.content,
+//                            it.description,
+//                            it.publishedAt,
+//                            it.title,
+//                            it.url,
+//                            it.urlToImage
+//                        )
+//                    )
+//                }
+//                addNews()
+////                Log.d("TAG", "getTopHeadlines: called ${result}")
+//            } catch (e: Exception) {
+//                Log.d("TAG", "$e")
+//            }
+//        }
+//    }
+//
+//    private fun addNews() {
+//        for (i in result) {
+//            viewModelScope.launch(Dispatchers.IO) {
+//                localViewModel.addArticle(i)
+//            }
+//        }
+//        Log.d("TAG", "addNews: called ")
+//    }
 
 //    private suspend fun getBitmap(imageLink: String): Bitmap {
 //        val loading = ImageLoader(context)

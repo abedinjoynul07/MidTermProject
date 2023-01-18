@@ -14,7 +14,7 @@ import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment
 import com.shokal.custopapiwithrecyclerview.fragments.HomeFragment
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val internetPermissionCode = 100
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(){
 
         checkPermission()
         binding.bottomNavigation.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.bookMarkFragment -> loadFragment(BookMarkFragment())
                 else -> loadFragment(HomeFragment())
             }
