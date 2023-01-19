@@ -12,8 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
+import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
@@ -102,7 +104,15 @@ class BookMarkAdapter(
 
 
         holder.newsCard.setOnClickListener {
+            val action =
+                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(null, news)
+            holder.newsCard.findNavController().navigate(action)
             Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+
+//            val action =
+//                BookMarkFragmentDirections.actionBookMarkFragmentToDetailedNewsFragment(null, news)
+//            val navController = Navigation.findNavController(holder.itemView)
+//            navController.navigate(action)
         }
     }
 

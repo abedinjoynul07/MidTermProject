@@ -3,7 +3,6 @@ package com.shokal.custopapiwithrecyclerview
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bookMarkFragment -> loadFragment(BookMarkFragment())
-                R.id.webViewFragment -> binding.bottomNavigation.visibility = View.GONE
                 else -> {
                     loadFragment(HomeFragment())
                 }
@@ -40,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment, fragment)
-        transaction.disallowAddToBackStack()
         transaction.commit()
     }
 

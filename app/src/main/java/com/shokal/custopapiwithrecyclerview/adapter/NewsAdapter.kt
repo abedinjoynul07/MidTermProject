@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.utils.widget.ImageFilterButton
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
@@ -93,13 +93,16 @@ class NewsAdapter(
             viewModel.addBookMarkArticle(bookmarkNews)
             Toast.makeText(context, "BookMark Inserted", Toast.LENGTH_SHORT).show()
         }
-
-
         holder.newsCard.setOnClickListener {
+//            val action =
+//                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(news, null)
+//            holder.newsCard.findNavController().navigate(action)
+            Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+
             val action =
                 HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(news, null)
-            holder.itemView.findNavController().navigate(action)
-            Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+            val navController = Navigation.findNavController(holder.itemView)
+            navController.navigate(action)
         }
     }
 

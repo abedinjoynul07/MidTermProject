@@ -2,18 +2,17 @@ package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.shokal.custopapiwithrecyclerview.R
 import com.squareup.picasso.Picasso
-import com.shokal.custopapiwithrecyclerview.fragments.DetailedNewsFragmentDirections
 
 class DetailedNewsFragment : Fragment() {
     private val args: DetailedNewsFragmentArgs by navArgs()
@@ -35,37 +34,75 @@ class DetailedNewsFragment : Fragment() {
 
         if (!TextUtils.isEmpty(args.news?.title)) {
             title.text = args.news?.title
+        } else if (!TextUtils.isEmpty(args.bookmark?.title)) {
+            title.text = args.news?.title
         } else {
             title.text = "No Name"
         }
+
         if (!TextUtils.isEmpty(args.news?.description)) {
+            description.text = args.news?.description
+        } else if (!TextUtils.isEmpty(args.bookmark?.description)) {
             description.text = args.news?.description
         } else {
             description.text = "No Description"
         }
+
         if (!TextUtils.isEmpty(args.news?.content)) {
+            content.text = args.news?.content
+        } else if (!TextUtils.isEmpty(args.bookmark?.content)) {
             content.text = args.news?.content
         } else {
             content.text = "No Content"
         }
-        Picasso.get()
-            .load(args.news?.urlToImage)
-            .placeholder(R.drawable.ic_connection_error)
-            .fit()
-            .centerCrop()
-            .centerCrop(1)
-            .into(imageView)
 
+        if (!TextUtils.isEmpty(args.news?.content)) {
+            Picasso.get()
+                .load(args.news?.urlToImage)
+                .placeholder(R.drawable.ic_connection_error)
+                .fit()
+                .centerCrop()
+                .centerCrop(1)
+                .into(imageView)
+        } else if (!TextUtils.isEmpty(args.bookmark?.content)) {
+            Picasso.get()
+                .load(args.bookmark?.urlToImage)
+                .placeholder(R.drawable.ic_connection_error)
+                .fit()
+                .centerCrop()
+                .centerCrop(1)
+                .into(imageView)
+        } else {
+            Picasso.get()
+                .load(R.drawable.ic_connection_error)
+                .placeholder(R.drawable.ic_connection_error)
+                .fit()
+                .centerCrop()
+                .centerCrop(1)
+                .into(imageView)
+        }
 
         continueButton.setOnClickListener {
-            val action =
-                args.news?.url?.let { it1 ->
-                    DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
-                        it1
-                    )
+            if (!TextUtils.isEmpty(args.news?.content)) {
+                val action =
+                    args.news?.url?.let { it1 ->
+                        DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
+                            it1
+                        )
+                    }
+                if (action != null) {
+                    view.findNavController().navigate(action)
                 }
-            if (action != null) {
-                view.findNavController().navigate(action)
+            } else if (!TextUtils.isEmpty(args.bookmark?.content)) {
+                val action =
+                    args.bookmark?.url?.let { it1 ->
+                        DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
+                            it1
+                        )
+                    }
+                if (action != null) {
+                    view.findNavController().navigate(action)
+                }
             }
         }
 
