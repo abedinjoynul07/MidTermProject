@@ -10,12 +10,15 @@ import com.shokal.custopapiwithrecyclerview.fragments.SportsFragment
 import com.shokal.custopapiwithrecyclerview.fragments.TechnologyFragment
 import com.shokal.custopapiwithrecyclerview.models.Tab
 
-class TabAdapter(manager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(manager, lifecycle){
+class TabAdapter(manager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(manager, lifecycle) {
     companion object {
         val tabList = listOf(
             Tab(NewsFragment(), "All News"),
             Tab(BusinessFragment(), "Business"),
             Tab(SportsFragment(), "Sports"),
+            Tab(TechnologyFragment(), "Technology"),
+            Tab(TechnologyFragment(), "Technology"),
             Tab(TechnologyFragment(), "Technology")
         )
     }

@@ -3,6 +3,7 @@ package com.shokal.custopapiwithrecyclerview.repositories
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
 @Dao
@@ -10,6 +11,8 @@ interface NewsDao {
     @Query("SELECT * FROM articles")
     fun getAll(): LiveData<List<LocalArticle>>
 
+    @Query("SELECT * FROM bookmarks")
+    fun getAllBookMark(): LiveData<List<BookMarkNews>>
 
     @Query("SELECT * FROM articles WHERE category = 'business'")
     fun getAllBusiness(): LiveData<List<LocalArticle>>
@@ -22,6 +25,9 @@ interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(article: LocalArticle)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBookMark(article: BookMarkNews)
 
     @Insert
     suspend fun insertAll(articles: List<LocalArticle>)

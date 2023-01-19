@@ -1,10 +1,12 @@
 package com.shokal.custopapiwithrecyclerview.models
 
-import android.graphics.Bitmap
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "articles")
+@Parcelize
 data class LocalArticle(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
@@ -17,4 +19,4 @@ data class LocalArticle(
     val title: String?,
     val url: String?,
     val urlToImage: String?
-)
+) : Parcelable

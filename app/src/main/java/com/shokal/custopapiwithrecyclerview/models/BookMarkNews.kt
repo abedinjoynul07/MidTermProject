@@ -1,9 +1,12 @@
 package com.shokal.custopapiwithrecyclerview.models
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "bookmarks")
+@Parcelize
 data class BookMarkNews(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
@@ -14,4 +17,4 @@ data class BookMarkNews(
     val title: String?,
     val url: String?,
     val urlToImage: String?
-)
+) : Parcelable

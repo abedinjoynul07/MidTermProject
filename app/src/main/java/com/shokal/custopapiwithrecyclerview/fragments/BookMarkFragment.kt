@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.shokal.custopapiwithrecyclerview.R
+import com.shokal.custopapiwithrecyclerview.adapter.BookMarkAdapter
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentNewsBinding
 import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
@@ -40,10 +42,16 @@ class BookMarkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.photos_grid)
+        refreshLayout = view.findViewById(R.id.swipeLayout)
         recyclerView.setHasFixedSize(true)
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
         initializeAdapter()
+
+        refreshLayout.setOnRefreshListener {
+            initializeAdapter()
+            refreshLayout.isRefreshing = false
+        }
     }
 
     private fun initializeAdapter() {
@@ -53,9 +61,9 @@ class BookMarkFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.newsList.observe(viewLifecycleOwner) {
-            recyclerView.adapter = NewsAdapter(
-                requireContext(), viewModel, it as ArrayList<LocalArticle>
+        viewModel.bookMarkNews.observe(viewLifecycleOwner) {
+            recyclerView.adapter = BookMarkAdapter(
+                requireContext(), viewModel, it as ArrayList<BookMarkNews>
             )
         }
     }

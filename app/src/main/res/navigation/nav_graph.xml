@@ -9,10 +9,53 @@
         android:id="@+id/bookMarkFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment"
         android:label="fragment_book_mark"
-        tools:layout="@layout/fragment_book_mark" />
+        tools:layout="@layout/fragment_book_mark">
+        <action
+            android:id="@+id/action_bookMarkFragment_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment2"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment2_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailedNewsFragment"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.DetailedNewsFragment"
+        android:label="fragment_detailed_news"
+        tools:layout="@layout/fragment_detailed_news">
+        <action
+            android:id="@+id/action_detailedNewsFragment_to_bookMarkFragment"
+            app:destination="@id/bookMarkFragment" />
+        <argument
+            android:name="news"
+            app:argType="com.shokal.custopapiwithrecyclerview.models.LocalArticle"
+            app:nullable="true" />
+        <argument
+            android:name="bookmark"
+            app:argType="com.shokal.custopapiwithrecyclerview.models.BookMarkNews"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_detailedNewsFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+        <action
+            android:id="@+id/action_detailedNewsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.WebViewFragment"
+        android:label="fragment_web_view"
+        tools:layout="@layout/fragment_web_view">
+        <action
+            android:id="@+id/action_webViewFragment_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
 </navigation>

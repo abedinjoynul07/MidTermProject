@@ -70,7 +70,7 @@ class TechnologyFragment : Fragment() {
                     LocalArticle(
                         0,
                         it.author,
-                        "all",
+                        "technology",
                         0,
                         it.content,
                         it.description,

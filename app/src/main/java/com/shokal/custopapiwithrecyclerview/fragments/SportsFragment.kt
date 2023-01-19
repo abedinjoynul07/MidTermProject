@@ -71,7 +71,7 @@ class SportsFragment : Fragment() {
                     LocalArticle(
                         0,
                         it.author,
-                        "all",
+                        "sports",
                         0,
                         it.content,
                         it.description,

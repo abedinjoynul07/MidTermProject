@@ -63,22 +63,22 @@ class NewsFragment : Fragment() {
     }
 
     private fun observeData() {
-        apiViewModel.news.observe(viewLifecycleOwner){
-            it.map {
+        apiViewModel.news.observe(viewLifecycleOwner) { articles ->
+            articles.map {
                 result.add(
-                        LocalArticle(
-                            0,
-                            it.author,
-                            "all",
-                            0,
-                            it.content,
-                            it.description,
-                            it.publishedAt,
-                            it.title,
-                            it.url,
-                            it.urlToImage
-                        )
+                    LocalArticle(
+                        0,
+                        it.author,
+                        "all",
+                        0,
+                        it.content,
+                        it.description,
+                        it.publishedAt,
+                        it.title,
+                        it.url,
+                        it.urlToImage
                     )
+                )
             }
             viewModel.addAllArticle(result)
         }

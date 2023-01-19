@@ -61,13 +61,13 @@ class BusinessFragment : Fragment() {
     }
 
     private fun observeData() {
-        apiViewModel.businessNews.observe(viewLifecycleOwner){
-            it.map {
+        apiViewModel.businessNews.observe(viewLifecycleOwner) { articles ->
+            articles.map {
                 result.add(
                     LocalArticle(
                         0,
                         it.author,
-                        "all",
+                        "business",
                         0,
                         it.content,
                         it.description,

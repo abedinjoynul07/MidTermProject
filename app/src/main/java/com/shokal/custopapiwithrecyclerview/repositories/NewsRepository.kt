@@ -3,6 +3,7 @@ package com.shokal.custopapiwithrecyclerview.repositories
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
 class NewsRepository(context: Context) {
@@ -11,6 +12,10 @@ class NewsRepository(context: Context) {
     private val localContext = context    //Fetch All the Users
     fun getAllNews(): LiveData<List<LocalArticle>> {
         return db.getAll()
+    }
+
+    fun getAllBookMarkNews(): LiveData<List<BookMarkNews>> {
+        return db.getAllBookMark()
     }
 
     fun getBusinessNews(): LiveData<List<LocalArticle>> {
@@ -30,10 +35,14 @@ class NewsRepository(context: Context) {
         return db.insert(article)
     }
 
+    suspend fun insertBookMarkArticle(article: BookMarkNews) {
+        return db.insertBookMark(article)
+    }
 
     suspend fun insertAllArticle(article: List<LocalArticle>) {
         return db.insertAll(article)
     }
+
     // Delete user
     suspend fun deleteUser(article: LocalArticle) {
         db.delete(article)
