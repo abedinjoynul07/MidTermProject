@@ -38,12 +38,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    override fun onResume() {
-        super.onResume()
-        _binding = null
-    }
-
+    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        Tab layout

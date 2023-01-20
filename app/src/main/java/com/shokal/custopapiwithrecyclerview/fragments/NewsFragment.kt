@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
@@ -24,6 +25,7 @@ class NewsFragment : Fragment() {
     private val apiViewModel: NewsViewModel by viewModels()
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
+    private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
 
     override fun onCreateView(
@@ -85,8 +87,29 @@ class NewsFragment : Fragment() {
                     )
                 }
             }
-            viewModel.addAllArticle(result)
+
+            viewModel.newsList.observe(viewLifecycleOwner) { articles ->
+                articles.map { localNews ->
+                    apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
+                        apiArticles.map {
+                            if (localNews.url == it.url) {
+                                allEqual = true
+                            } else {
+                                allEqual
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!allEqual) {
+                viewModel.addAllArticle(result)
+            } else {
+                Toast.makeText(requireContext(), "All the values are equal", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
+
         viewModel.newsList.observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>

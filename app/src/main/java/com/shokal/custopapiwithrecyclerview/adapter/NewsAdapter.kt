@@ -98,11 +98,12 @@ class NewsAdapter(
         }
         holder.newsCard.setOnClickListener {
             Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+            val action = HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
+                news,
+                null
+            )
             holder.itemView.findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
-                    news,
-                    null
-                )
+                action
             )
         }
     }

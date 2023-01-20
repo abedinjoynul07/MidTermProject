@@ -11,6 +11,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.ActivityMainBinding
 import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment
@@ -23,6 +27,8 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: LocalNewsViewModel
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private var listTasks: List<LocalArticle> = ArrayList()
 
     private val internetPermissionCode = 100
@@ -31,8 +37,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        checkPermission()
         viewModel = ViewModelProvider(this)[LocalNewsViewModel::class.java]
 
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bookMarkFragment -> loadFragment(BookMarkFragment(), HomeFragment())
@@ -95,5 +108,4 @@ class MainActivity : AppCompatActivity() {
             Timber.d("Permission Already Granted")
         }
     }
-
 }
