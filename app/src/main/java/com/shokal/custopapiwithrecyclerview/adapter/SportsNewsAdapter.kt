@@ -1,5 +1,6 @@
 package com.shokal.custopapiwithrecyclerview.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.text.TextUtils
@@ -9,22 +10,26 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.utils.widget.ImageFilterButton
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
-import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragmentDirections
 import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
+import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
+import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
 
-class BookMarkAdapter(
+class SportsNewsAdapter(
     private val context: Context,
-    val viewModel: LocalNewsViewModel,
-    private val arrayList: ArrayList<BookMarkNews>
-) : RecyclerView.Adapter<BookMarkAdapter.ItemViewHolder>() {
+    private val viewModel: LocalNewsViewModel,
+    private val arrayList: ArrayList<LocalArticle>
+) : RecyclerView.Adapter<SportsNewsAdapter.ItemViewHolder>() {
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.imageView)
         val title: TextView = view.findViewById(R.id.newsTitle)
@@ -32,6 +37,7 @@ class BookMarkAdapter(
         val authorName: TextView = view.findViewById(R.id.authorName)
         val date: TextView = view.findViewById(R.id.date)
         val newsCard: CardView = view.findViewById(R.id.cardViewNews)
+        val favButton: ImageFilterButton = view.findViewById(R.id.favouriteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -39,6 +45,8 @@ class BookMarkAdapter(
         return ItemViewHolder(root)
     }
 
+    @SuppressLint("SimpleDateFormat")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val news = arrayList[position]
 
@@ -65,29 +73,37 @@ class BookMarkAdapter(
             holder.date.text = "No Date"
         }
         if (!TextUtils.isEmpty(news.urlToImage)) {
-            Picasso.get()
-                .load(news.urlToImage)
-                .fit()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_connection_error)
-                .centerCrop(1)
-                .centerCrop()
-                .into(holder.image)
+            Picasso.get().load(news.urlToImage).fit().placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_connection_error).centerCrop(1).centerCrop().into(holder.image)
         } else {
-            Picasso.get()
-                .load(R.drawable.ic_connection_error)
-                .fit()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_connection_error)
-                .centerCrop(1)
-                .centerCrop()
-                .into(holder.image)
+            Picasso.get().load(R.drawable.ic_connection_error).fit()
+                .placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
+                .centerCrop(1).centerCrop().into(holder.image)
+        }
+
+
+        holder.favButton.setOnClickListener {
+            val bookmarkNews = BookMarkNews(
+                0,
+                news.author,
+                news.content,
+                news.description,
+                news.publishedAt,
+                news.title,
+                news.url,
+                news.urlToImage
+            )
+            viewModel.addBookMarkArticle(bookmarkNews)
+            Toast.makeText(context, "BookMark Inserted", Toast.LENGTH_SHORT).show()
         }
         holder.newsCard.setOnClickListener {
-            val action =
-                BookMarkFragmentDirections.actionBookMarkFragmentToDetailedNewsFragment(null, news)
-            holder.itemView.findNavController().navigate(action)
-            Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Card Clicked From Sports", Toast.LENGTH_SHORT).show()
+            holder.itemView.findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
+                    news,
+                    null
+                )
+            )
         }
     }
 

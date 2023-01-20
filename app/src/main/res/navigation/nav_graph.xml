@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_bookMarkFragment_to_detailedNewsFragment"
             app:destination="@id/detailedNewsFragment" />
+        <action
+            android:id="@+id/action_bookMarkFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment2"
@@ -22,6 +25,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_detailedNewsFragment"
             app:destination="@id/detailedNewsFragment" />
+        <action
+            android:id="@+id/action_homeFragment2_to_bookMarkFragment"
+            app:destination="@id/bookMarkFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedNewsFragment"

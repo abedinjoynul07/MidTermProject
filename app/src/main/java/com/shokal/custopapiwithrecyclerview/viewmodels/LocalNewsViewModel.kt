@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.repositories.NewsRepository
@@ -28,13 +27,6 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
         technologyNewsList = newsRepo.getTechnologyNews()
     }
 
-
-    fun addArticle(article: LocalArticle) {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsRepo.insertArticle(article)
-        }
-    }
-
     fun addBookMarkArticle(article: BookMarkNews) {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepo.insertBookMarkArticle(article)
@@ -44,13 +36,6 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
     fun addAllArticle(article: List<LocalArticle>) {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepo.insertAllArticle(article)
-        }
-    }
-
-
-    fun deleteUser(article: LocalArticle) {
-        viewModelScope.launch(Dispatchers.IO) {
-            newsRepo.deleteUser(article)
         }
     }
 }

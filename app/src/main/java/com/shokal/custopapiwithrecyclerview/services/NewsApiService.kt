@@ -11,37 +11,36 @@ import retrofit2.http.Query
 private const val BASE_URL = "https://newsapi.org/v2/"
 
 val moshi: Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-val retrofit: Retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .baseUrl(BASE_URL)
-    .build()
+val retrofit: Retrofit =
+    Retrofit.Builder().addConverterFactory(MoshiConverterFactory.create(moshi)).baseUrl(BASE_URL)
+        .build()
 
 interface NewsApiService {
     @GET("everything")
     suspend fun getAllNews(
         @Query("apiKey") apiKey: String,
         @Query("q") q: String,
-    ) : News
+    ): News
 
     @GET("top-headlines")
     suspend fun getBusinessNews(
         @Query("apiKey") apiKey: String,
         @Query("category") category: String,
-    ) : News
+    ): News
 
     @GET("top-headlines")
     suspend fun getSportsNews(
         @Query("apiKey") apiKey: String,
         @Query("category") category: String,
-    ) : News
+    ): News
 
     @GET("top-headlines")
     suspend fun getTechnologyNews(
         @Query("apiKey") apiKey: String,
         @Query("category") category: String,
-    ) : News
+    ): News
 }
 
-object NewsApi{
+object NewsApi {
     val retrofitService: NewsApiService by lazy { retrofit.create(NewsApiService::class.java) }
 }

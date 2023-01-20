@@ -2,13 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/homeFragment"
-        app:showAsAction="always"
+        android:id="@+id/homeFragment2"
         android:icon="@drawable/baseline_home_24"
-        android:title="Home" />
+        android:title="Home"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/actionSearch"
+        android:icon="@drawable/baseline_search_24"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+
     <item
         android:id="@+id/bookMarkFragment"
-        app:showAsAction="always"
         android:icon="@drawable/baseline_bookmarks_24"
-        android:title="BookMark" />
+        android:title="BookMark"
+        app:showAsAction="always" />
 </menu>

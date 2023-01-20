@@ -2,7 +2,6 @@ package com.shokal.custopapiwithrecyclerview.repositories
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 

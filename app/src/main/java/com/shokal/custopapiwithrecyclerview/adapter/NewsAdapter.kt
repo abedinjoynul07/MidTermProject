@@ -13,10 +13,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.utils.widget.ImageFilterButton
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
+import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
@@ -24,7 +27,7 @@ import com.squareup.picasso.Picasso
 
 class NewsAdapter(
     private val context: Context,
-    val viewModel: LocalNewsViewModel,
+    private val viewModel: LocalNewsViewModel,
     private val arrayList: ArrayList<LocalArticle>
 ) : RecyclerView.Adapter<NewsAdapter.ItemViewHolder>() {
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -94,15 +97,13 @@ class NewsAdapter(
             Toast.makeText(context, "BookMark Inserted", Toast.LENGTH_SHORT).show()
         }
         holder.newsCard.setOnClickListener {
-//            val action =
-//                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(news, null)
-//            holder.newsCard.findNavController().navigate(action)
             Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
-
-            val action =
-                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(news, null)
-            val navController = Navigation.findNavController(holder.itemView)
-            navController.navigate(action)
+            holder.itemView.findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
+                    news,
+                    null
+                )
+            )
         }
     }
 

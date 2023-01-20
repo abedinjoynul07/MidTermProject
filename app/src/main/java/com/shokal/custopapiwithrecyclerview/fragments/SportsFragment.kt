@@ -4,19 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
+import com.shokal.custopapiwithrecyclerview.adapter.SportsNewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentNewsBinding
 import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
-import com.shokal.custopapiwithrecyclerview.networks.CheckNetworkConnection
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
@@ -64,28 +63,33 @@ class SportsFragment : Fragment() {
         recyclerView.visibility = View.VISIBLE
         observeData()
     }
+
     private fun observeData() {
-        apiViewModel.sportsNews.observe(viewLifecycleOwner){
-            it.map {
-                result.add(
+        apiViewModel.sportsNews.observe(viewLifecycleOwner) { articles ->
+            articles.map {
+                it.url?.let { it1 ->
                     LocalArticle(
                         0,
                         it.author,
-                        "sports",
-                        0,
                         it.content,
                         it.description,
                         it.publishedAt,
                         it.title,
-                        it.url,
-                        it.urlToImage
+                        it1,
+                        it.urlToImage,
+                        "sports",
+                        false
                     )
-                )
+                }?.let { it2 ->
+                    result.add(
+                        it2
+                    )
+                }
             }
             viewModel.addAllArticle(result)
         }
         viewModel.sportsNewsList.observe(viewLifecycleOwner) {
-            recyclerView.adapter = NewsAdapter(
+            recyclerView.adapter = SportsNewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
         }

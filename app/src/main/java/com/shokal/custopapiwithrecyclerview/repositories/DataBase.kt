@@ -9,9 +9,9 @@ import com.shokal.custopapiwithrecyclerview.converters.ImageConverter
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
-@Database(entities = [LocalArticle::class, BookMarkNews::class], version = 7)
+@Database(entities = [BookMarkNews::class, LocalArticle::class], version = 2)
 @TypeConverters(ImageConverter::class)
-abstract class DataBase: RoomDatabase() {
+abstract class DataBase : RoomDatabase() {
     abstract fun newsDao(): NewsDao
 
     companion object {
@@ -26,7 +26,7 @@ abstract class DataBase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     DataBase::class.java,
-                    "news_database"
+                    "news_db"
                 )
                     .fallbackToDestructiveMigration()
                     .build()

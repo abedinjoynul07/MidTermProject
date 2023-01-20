@@ -2,7 +2,6 @@ package com.shokal.custopapiwithrecyclerview.viewmodels
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -10,15 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.shokal.custopapiwithrecyclerview.BuildConfig
 import com.shokal.custopapiwithrecyclerview.models.Article
-import com.shokal.custopapiwithrecyclerview.models.LocalArticle
-import com.shokal.custopapiwithrecyclerview.models.News
 import com.shokal.custopapiwithrecyclerview.services.NewsApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 enum class NewsApiStatus { LOADING, ERROR, DONE }
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
-    private val result = mutableListOf<LocalArticle>()
+    private val result = mutableListOf<Article>()
     private val localViewModel: LocalNewsViewModel
     private val _status = MutableLiveData<NewsApiStatus>()
     val status: LiveData<NewsApiStatus> = _status
@@ -47,9 +43,14 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             _status.value = NewsApiStatus.LOADING
             try {
                 _news.value = NewsApi.retrofitService.getAllNews(BuildConfig.API_KEY, "*").articles
-                _businessNews.value = NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "business").articles
-                _sportsNews.value = NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "sports").articles
-                _technologyNews.value = NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "technology").articles
+                _businessNews.value = NewsApi.retrofitService.getBusinessNews(
+                    BuildConfig.API_KEY, "business"
+                ).articles
+                _sportsNews.value =
+                    NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "sports").articles
+                _technologyNews.value = NewsApi.retrofitService.getBusinessNews(
+                    BuildConfig.API_KEY, "technology"
+                ).articles
                 _status.value = NewsApiStatus.DONE
 
             } catch (e: Exception) {
@@ -61,53 +62,5 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
                 _technologyNews.value = listOf()
             }
         }
-
-        //insertAllNews(news, "all")
     }
-
-//    private fun insertAllNews(news: LiveData<List<Article>>, category: String) {
-//        viewModelScope.launch {
-//            try {
-//                val response = news
-//                response.articles.map {
-//                    result.add(
-//                        LocalArticle(
-//                            0,
-//                            it.author,
-//                            category,
-//                            0,
-//                            it.content,
-//                            it.description,
-//                            it.publishedAt,
-//                            it.title,
-//                            it.url,
-//                            it.urlToImage
-//                        )
-//                    )
-//                }
-//                addNews()
-////                Log.d("TAG", "getTopHeadlines: called ${result}")
-//            } catch (e: Exception) {
-//                Log.d("TAG", "$e")
-//            }
-//        }
-//    }
-//
-//    private fun addNews() {
-//        for (i in result) {
-//            viewModelScope.launch(Dispatchers.IO) {
-//                localViewModel.addArticle(i)
-//            }
-//        }
-//        Log.d("TAG", "addNews: called ")
-//    }
-
-//    private suspend fun getBitmap(imageLink: String): Bitmap {
-//        val loading = ImageLoader(context)
-//        val request = ImageRequest.Builder(context).data(imageLink).build()
-//        val result = (loading.execute(request) as SuccessResult).drawable
-//        return (result as BitmapDrawable).bitmap
-//    }
-
-
 }
