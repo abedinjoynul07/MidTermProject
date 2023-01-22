@@ -27,8 +27,7 @@ abstract class DataBase : RoomDatabase() {
                     context.applicationContext,
                     DataBase::class.java,
                     "news_db"
-                )
-                    .fallbackToDestructiveMigration()
+                ).fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 return instance

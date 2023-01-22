@@ -26,7 +26,6 @@ class NewsFragment : Fragment() {
     private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
     private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +40,6 @@ class NewsFragment : Fragment() {
         _binding = null
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.photos_grid)
@@ -50,7 +48,6 @@ class NewsFragment : Fragment() {
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
         initializeAdapter()
-
         refreshLayout.setOnRefreshListener {
             initializeAdapter()
             refreshLayout.isRefreshing = false
@@ -77,7 +74,7 @@ class NewsFragment : Fragment() {
                         it.title,
                         it1,
                         it.urlToImage,
-                        "all",
+                        "general",
                         false
                     )
                 }?.let { it2 ->
@@ -99,11 +96,10 @@ class NewsFragment : Fragment() {
                     }
                 }
             }
-
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "All the values are equal", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Up to dated...", Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -129,7 +125,6 @@ class NewsFragment : Fragment() {
                 return false
             }
         })
-
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -140,12 +135,10 @@ class NewsFragment : Fragment() {
                 filteredlist.add(item)
             }
         }
-
         if (filteredlist.isEmpty()) {
             Toast.makeText(requireContext(), "No News Found...", Toast.LENGTH_SHORT).show()
         } else {
 
         }
-
     }
 }

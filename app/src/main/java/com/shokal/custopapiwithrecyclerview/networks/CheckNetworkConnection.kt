@@ -10,11 +10,9 @@ import androidx.lifecycle.LiveData
 
 class CheckNetworkConnection(private val connectivityManager: ConnectivityManager) :
     LiveData<Boolean>() {
-
     constructor(application: Application) : this(application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
 
     private val networkCallback =
-
         object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
@@ -38,5 +36,4 @@ class CheckNetworkConnection(private val connectivityManager: ConnectivityManage
         super.onInactive()
         connectivityManager.unregisterNetworkCallback(networkCallback)
     }
-
 }

@@ -12,7 +12,6 @@ import com.shokal.custopapiwithrecyclerview.services.NewsApi
 import kotlinx.coroutines.*
 
 enum class NewsApiStatus { LOADING, ERROR, DONE }
-
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
     private val result = mutableListOf<Article>()
     private val localViewModel: LocalNewsViewModel
@@ -20,19 +19,14 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     val status: LiveData<NewsApiStatus> = _status
     private val _news = MutableLiveData<List<Article>>()
     val news: LiveData<List<Article>> = _news
-
     private val _businessNews = MutableLiveData<List<Article>>()
     val businessNews: LiveData<List<Article>> = _businessNews
-
     private val _sportsNews = MutableLiveData<List<Article>>()
     val sportsNews: LiveData<List<Article>> = _sportsNews
-
     private val _technologyNews = MutableLiveData<List<Article>>()
     val technologyNews: LiveData<List<Article>> = _technologyNews
-
     private val _scienceNews = MutableLiveData<List<Article>>()
     val scienceNews: LiveData<List<Article>> = _scienceNews
-
     private val _healthNews = MutableLiveData<List<Article>>()
     val healthNews: LiveData<List<Article>> = _healthNews
 

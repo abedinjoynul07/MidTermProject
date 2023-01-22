@@ -26,7 +26,6 @@ class WebViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         webView = view.findViewById(R.id.webView1)
-
         webView.loadUrl(args.url)
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = object : WebViewClient() {

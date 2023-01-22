@@ -59,13 +59,11 @@ class NewsAdapter(
         } else {
             holder.title.text = "No Title!"
         }
-
         if (!TextUtils.isEmpty(news.description)) {
             holder.description.text = news.description
         } else {
             holder.description.text = "No Description!"
         }
-
         if (!TextUtils.isEmpty(news.author)) {
             holder.authorName.text = news.author
         } else {
@@ -85,7 +83,6 @@ class NewsAdapter(
                 .centerCrop(1).centerCrop().into(holder.image)
         }
 
-
         holder.favButton.setOnClickListener {
             val bookmarkNews = BookMarkNews(
                 0,
@@ -98,20 +95,18 @@ class NewsAdapter(
                 news.urlToImage
             )
             viewModel.addBookMarkArticle(bookmarkNews)
-            Toast.makeText(context, "BookMark Inserted", Toast.LENGTH_SHORT).show()
         }
         holder.newsCard.setOnClickListener {
-            Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
             val action = HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(news)
             Navigation.findNavController(holder.itemView).navigate(action)
         }
     }
 
-
     override fun getItemCount(): Int {
         return tasksList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun filterList(filterlist: List<LocalArticle>) {
         tasksList = filterlist
         notifyDataSetChanged()
@@ -124,7 +119,6 @@ class NewsAdapter(
                 filteredlist.add(item)
             }
         }
-
         if (filteredlist.isEmpty()) {
             Toast.makeText(context, "No News Found...", Toast.LENGTH_SHORT).show()
         } else {

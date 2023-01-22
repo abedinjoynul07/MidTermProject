@@ -7,7 +7,7 @@ import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
 @Dao
 interface NewsDao {
-    @Query("SELECT * FROM articles")
+    @Query("SELECT * FROM articles WHERE category = 'general'")
     fun getAll(): LiveData<List<LocalArticle>>
 
     @Query("SELECT * FROM bookmarks")

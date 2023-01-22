@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.utils.widget.ImageFilterButton
@@ -89,17 +88,17 @@ class SportsNewsAdapter(
                 news.urlToImage
             )
             viewModel.addBookMarkArticle(bookmarkNews)
-            Toast.makeText(context, "BookMark Inserted", Toast.LENGTH_SHORT).show()
         }
-        holder.newsCard.setOnClickListener {
-            Toast.makeText(context, "Card Clicked From Sports", Toast.LENGTH_SHORT).show()
+//        holder.newsCard.setOnClickListener {
+//            Toast.makeText(context, "Card Clicked From Sports", Toast.LENGTH_SHORT).show()
 //            holder.itemView.findNavController().navigate(
 //                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
 //                    news,
 //                    null
 //                )
 //            )
-        }
+//        }
+
     }
 
     override fun getItemCount(): Int {

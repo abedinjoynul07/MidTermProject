@@ -26,7 +26,6 @@ class HealthFragment : Fragment() {
     private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
     private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +39,6 @@ class HealthFragment : Fragment() {
         _binding = null
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.photos_grid)
@@ -49,7 +47,6 @@ class HealthFragment : Fragment() {
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
         initializeAdapter()
-
         refreshLayout.setOnRefreshListener {
             initializeAdapter()
             refreshLayout.isRefreshing = false
@@ -98,11 +95,10 @@ class HealthFragment : Fragment() {
                     }
                 }
             }
-
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "All the values are equal", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Up to Dated..", Toast.LENGTH_SHORT)
                     .show()
             }
         }

@@ -7,7 +7,6 @@ import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
 class NewsRepository(context: Context) {
     private val db: NewsDao = DataBase.getDatabase(context).newsDao()
-
     private val localContext = context    //Fetch All the Users
     fun getAllNews(): LiveData<List<LocalArticle>> {
         return db.getAll()
@@ -49,5 +48,4 @@ class NewsRepository(context: Context) {
     suspend fun deleteAllNews() {
         db.deleteAll()
     }
-
 }

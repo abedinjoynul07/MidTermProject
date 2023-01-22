@@ -26,7 +26,6 @@ class BusinessFragment : Fragment() {
     private val binding get() = _binding!!
     private val result = mutableListOf<LocalArticle>()
     private var allEqual = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -47,7 +46,6 @@ class BusinessFragment : Fragment() {
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
         initializeAdapter()
-
         refreshLayout.setOnRefreshListener {
             initializeAdapter()
             refreshLayout.isRefreshing = false
@@ -96,11 +94,10 @@ class BusinessFragment : Fragment() {
                     }
                 }
             }
-
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "All the values are equal", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Noting news Found...", Toast.LENGTH_SHORT)
                     .show()
             }
         }

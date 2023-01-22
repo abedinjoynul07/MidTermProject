@@ -16,13 +16,11 @@ import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 
 class BookMarkFragment : Fragment() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var refreshLayout: SwipeRefreshLayout
     private val viewModel: LocalNewsViewModel by viewModels()
     private var _binding: FragmentBookMarkBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -34,7 +32,6 @@ class BookMarkFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -49,7 +46,6 @@ class BookMarkFragment : Fragment() {
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
         initializeAdapter()
-
         refreshLayout.setOnRefreshListener {
             initializeAdapter()
             refreshLayout.isRefreshing = false

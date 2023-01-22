@@ -31,25 +31,21 @@ class DetailedNewsFragment : Fragment() {
         val content = view.findViewById<TextView>(R.id.newsContent)
         val imageView = view.findViewById<ImageView>(R.id.newsImage)
         val continueButton = view.findViewById<Button>(R.id.continueButton)
-
         if (!TextUtils.isEmpty(args.news.title)) {
             title.text = args.news.title
         } else {
             title.text = "No Name"
         }
-
         if (!TextUtils.isEmpty(args.news.description)) {
             description.text = args.news.description
         } else {
             description.text = "No Description"
         }
-
         if (!TextUtils.isEmpty(args.news.content)) {
             content.text = args.news.content
         } else {
             content.text = "No Content"
         }
-
         if (!TextUtils.isEmpty(args.news.content)) {
             Picasso.get()
                 .load(args.news.urlToImage)
@@ -67,7 +63,6 @@ class DetailedNewsFragment : Fragment() {
                 .centerCrop(1)
                 .into(imageView)
         }
-
         continueButton.setOnClickListener {
             if (!TextUtils.isEmpty(args.news.url)) {
                 val action =
@@ -81,6 +76,5 @@ class DetailedNewsFragment : Fragment() {
                 }
             }
         }
-
     }
 }

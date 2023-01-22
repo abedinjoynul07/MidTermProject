@@ -1,7 +1,5 @@
 package com.shokal.custopapiwithrecyclerview.adapter
 
-//import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragmentDirections
-//import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
 import android.content.Context
 import android.text.TextUtils
 import android.view.LayoutInflater
