@@ -57,14 +57,13 @@ class NewsFragment : Fragment() {
 
     private fun initializeAdapter() {
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.visibility = View.VISIBLE
         observeData()
     }
 
     private fun observeData() {
         apiViewModel.news.observe(viewLifecycleOwner) { articles ->
             articles.map {
-                it.url?.let { it1 ->
+                it.url.let { it1 ->
                     LocalArticle(
                         0,
                         it.author,
@@ -77,7 +76,7 @@ class NewsFragment : Fragment() {
                         "general",
                         false
                     )
-                }?.let { it2 ->
+                }.let { it2 ->
                     result.add(
                         it2
                     )
@@ -108,6 +107,8 @@ class NewsFragment : Fragment() {
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
         }
+
+
     }
 
     @Deprecated("Deprecated in Java")
@@ -134,8 +135,11 @@ class NewsFragment : Fragment() {
             if (item.title?.lowercase()?.contains(text!!) == true) {
                 filteredlist.add(item)
             }
+            recyclerView.adapter = NewsAdapter(requireContext(), viewModel, filteredlist)
         }
         if (filteredlist.isEmpty()) {
+            filteredlist.addAll(listArticles)
+            recyclerView.adapter = NewsAdapter(requireContext(), viewModel, filteredlist)
             Toast.makeText(requireContext(), "No News Found...", Toast.LENGTH_SHORT).show()
         } else {
 
