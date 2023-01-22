@@ -34,7 +34,7 @@ interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBookMark(article: BookMarkNews)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(articles: List<LocalArticle>)
 
     @Update

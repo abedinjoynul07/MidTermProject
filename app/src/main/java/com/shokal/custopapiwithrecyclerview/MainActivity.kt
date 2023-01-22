@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -19,6 +20,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.ActivityMainBinding
+import com.shokal.custopapiwithrecyclerview.fragments.BookMarkWebViewFragment
+import com.shokal.custopapiwithrecyclerview.fragments.WebViewFragment
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import java.util.*
@@ -41,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.newsList.observe(this) {
             listArticles.addAll(it)
         }
+
+
         adapter = NewsAdapter(this, viewModel, listArticles)
         val navView: BottomNavigationView = binding.navView
 
@@ -50,6 +55,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment2, R.id.bookMarkFragment2
             )
         )
+
+        if (WebViewFragment().isAdded or BookMarkWebViewFragment().isAdded) {
+            binding.navView.visibility = View.INVISIBLE
+        }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

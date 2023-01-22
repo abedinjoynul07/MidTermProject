@@ -9,7 +9,7 @@ import com.shokal.custopapiwithrecyclerview.converters.ImageConverter
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 
-@Database(entities = [BookMarkNews::class, LocalArticle::class], version = 2)
+@Database(entities = [BookMarkNews::class, LocalArticle::class], version = 5)
 @TypeConverters(ImageConverter::class)
 abstract class DataBase : RoomDatabase() {
     abstract fun newsDao(): NewsDao

@@ -10,4 +10,6 @@
     <color name="secondaryTextColor">#ffffff</color>
     <color name="backgroundColor">#2E2B2B</color>
     <color name="backgroundColorList">#504E4E</color>
+    <color name="white">#ffffff</color>
+    <color name="selected_item">#00D2ED</color>
 </resources>
