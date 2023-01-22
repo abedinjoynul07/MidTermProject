@@ -1,18 +1,18 @@
 package com.shokal.custopapiwithrecyclerview.viewmodels
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.shokal.custopapiwithrecyclerview.BuildConfig
 import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.services.NewsApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 enum class NewsApiStatus { LOADING, ERROR, DONE }
+
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
     private val result = mutableListOf<Article>()
     private val localViewModel: LocalNewsViewModel
@@ -30,6 +30,13 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     private val _technologyNews = MutableLiveData<List<Article>>()
     val technologyNews: LiveData<List<Article>> = _technologyNews
 
+    private val _scienceNews = MutableLiveData<List<Article>>()
+    val scienceNews: LiveData<List<Article>> = _scienceNews
+
+    private val _healthNews = MutableLiveData<List<Article>>()
+    val healthNews: LiveData<List<Article>> = _healthNews
+
+    @SuppressLint("StaticFieldLeak")
     val context: Context
 
     init {
@@ -38,28 +45,55 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
         getNews()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun getNews() {
-        viewModelScope.launch {
-            _status.value = NewsApiStatus.LOADING
+        GlobalScope.launch {
+            _status.postValue(NewsApiStatus.LOADING)
             try {
-                _news.value = NewsApi.retrofitService.getAllNews(BuildConfig.API_KEY, "*").articles
-                _businessNews.value = NewsApi.retrofitService.getBusinessNews(
-                    BuildConfig.API_KEY, "business"
-                ).articles
-                _sportsNews.value =
-                    NewsApi.retrofitService.getBusinessNews(BuildConfig.API_KEY, "sports").articles
-                _technologyNews.value = NewsApi.retrofitService.getBusinessNews(
-                    BuildConfig.API_KEY, "technology"
-                ).articles
-                _status.value = NewsApiStatus.DONE
+                _news.postValue(
+                    NewsApi.retrofitService.getAllNews(
+                        BuildConfig.API_KEY,
+                        "general"
+                    ).articles
+                )
+                _businessNews.postValue(
+                    NewsApi.retrofitService.getBusinessNews(
+                        BuildConfig.API_KEY, "business"
+                    ).articles
+                )
+                _sportsNews.postValue(
+                    NewsApi.retrofitService.getBusinessNews(
+                        BuildConfig.API_KEY,
+                        "sports"
+                    ).articles
+                )
+                _technologyNews.postValue(
+                    NewsApi.retrofitService.getBusinessNews(
+                        BuildConfig.API_KEY, "technology"
+                    ).articles
+                )
+                _scienceNews.postValue(
+                    NewsApi.retrofitService.getBusinessNews(
+                        BuildConfig.API_KEY, "science"
+                    ).articles
+                )
+                _healthNews.postValue(
+                    NewsApi.retrofitService.getBusinessNews(
+                        BuildConfig.API_KEY, "health"
+                    ).articles
+                )
+                _status.postValue(NewsApiStatus.DONE)
 
             } catch (e: Exception) {
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                _status.value = NewsApiStatus.ERROR
-                _news.value = listOf()
-                _businessNews.value = listOf()
-                _sportsNews.value = listOf()
-                _technologyNews.value = listOf()
+                withContext(Dispatchers.IO) {
+                    _status.postValue(NewsApiStatus.ERROR)
+                    _news.postValue(listOf())
+                    _businessNews.postValue(listOf())
+                    _sportsNews.postValue(listOf())
+                    _technologyNews.postValue(listOf())
+                    _scienceNews.postValue(listOf())
+                    _healthNews.postValue(listOf())
+                }
             }
         }
     }

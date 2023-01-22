@@ -17,29 +17,30 @@ import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
-class TechnologyFragment : Fragment() {
+class ScienceFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var refreshLayout: SwipeRefreshLayout
     private val viewModel: LocalNewsViewModel by viewModels()
     private val apiViewModel: NewsViewModel by viewModels()
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
-    private val result = mutableListOf<LocalArticle>()
     private var allEqual = false
+    private val result = mutableListOf<LocalArticle>()
+    private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_technology, container, false)
+        _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,7 +64,7 @@ class TechnologyFragment : Fragment() {
     }
 
     private fun observeData() {
-        apiViewModel.technologyNews.observe(viewLifecycleOwner) { articles ->
+        apiViewModel.scienceNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
                 it.url?.let { it1 ->
                     LocalArticle(
@@ -75,7 +76,7 @@ class TechnologyFragment : Fragment() {
                         it.title,
                         it1,
                         it.urlToImage,
-                        "technology",
+                        "science",
                         false
                     )
                 }?.let { it2 ->
@@ -84,7 +85,7 @@ class TechnologyFragment : Fragment() {
                     )
                 }
             }
-            viewModel.technologyNewsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.scienceNewsList.observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -105,7 +106,7 @@ class TechnologyFragment : Fragment() {
                     .show()
             }
         }
-        viewModel.technologyNewsList.observe(viewLifecycleOwner) {
+        viewModel.scienceNewsList.observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )

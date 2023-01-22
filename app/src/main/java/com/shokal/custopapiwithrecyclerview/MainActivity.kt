@@ -1,37 +1,40 @@
 package com.shokal.custopapiwithrecyclerview
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.ActivityMainBinding
-import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment
-import com.shokal.custopapiwithrecyclerview.fragments.HomeFragment
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import timber.log.Timber
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: LocalNewsViewModel
     private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private var listTasks: List<LocalArticle> = ArrayList()
+    private var listArticles: ArrayList<LocalArticle> = ArrayList()
+    var adapter: NewsAdapter? = null
 
     private val internetPermissionCode = 100
+
+    @SuppressLint("CommitTransaction")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,72 +43,85 @@ class MainActivity : AppCompatActivity() {
         checkPermission()
         viewModel = ViewModelProvider(this)[LocalNewsViewModel::class.java]
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        viewModel.newsList.observe(this) {
+            listArticles.addAll(it)
+        }
+        adapter = NewsAdapter(this, viewModel, listArticles)
+        val navView: BottomNavigationView = binding.navView
+
+        navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment2, R.id.bookMarkFragment2
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.bookMarkFragment -> loadFragment(BookMarkFragment(), HomeFragment())
-                R.id.actionSearch -> {
-                    val searchItem: MenuItem = it
-                    val searchView: SearchView = searchItem.actionView as SearchView
-                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-                        android.widget.SearchView.OnQueryTextListener {
-                        override fun onQueryTextSubmit(p0: String?): Boolean {
-                            return false
-                        }
+        navView.setupWithNavController(navController)
+    }
 
-                        override fun onQueryTextChange(msg: String): Boolean {
-                            filter(msg)
-                            return false
-                        }
-                    })
-                }
-                else -> loadFragment(HomeFragment(), BookMarkFragment())
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+//    override fun onBackPressed() {
+//        val count = supportFragmentManager.backStackEntryCount
+//        if (count > 0) {
+//            super.onBackPressed()
+//            //additional code
+//        } else {
+//            supportFragmentManager.popBackStack()
+//        }
+//    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_item, menu)
+        val item = menu?.findItem(R.id.actionSearch)
+        val searchView = item?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
             }
-            true
-        }
-    }
 
-    private fun filter(text: String) {
-        val filteredlist: MutableList<LocalArticle> = ArrayList()
-        for (item in listTasks) {
-            if (item.title?.lowercase()?.contains(text.lowercase()) == true) {
-                filteredlist.add(item)
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter?.serach(newText)
+                return false
             }
-        }
-        if (filteredlist.isEmpty()) {
-            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show()
-        } else {
-            NewsAdapter(this, viewModel, filteredlist as ArrayList<LocalArticle>)
-        }
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 
-    private fun loadFragment(fragment: Fragment, removeFragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.remove(removeFragment)
-        transaction.replace(R.id.nav_host_fragment, fragment)
-        transaction.commit()
-    }
+
+    //    private fun loadFragment(fragment: Fragment, removeFragment: Fragment) {
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.remove(removeFragment)
+//        transaction.replace(R.id.nav_host_fragment, fragment)
+//        transaction.commit()
+//    }
+//    private fun openFragment(fragment: Fragment) {
+//        val fragmentManager: FragmentManager = supportFragmentManager
+//        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+//        if (fragment.isAdded) {
+//            transaction.show(fragment)
+//        } else {
+//            transaction.replace(R.id.nav_host_fragment_activity_main, fragment)
+//            transaction.addToBackStack(null)
+//            transaction.commit()
+//        }
+//
+//    }
 
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.INTERNET
+                this, Manifest.permission.INTERNET
             ) == PackageManager.PERMISSION_DENIED
         ) {
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.INTERNET),
-                internetPermissionCode
+                this, arrayOf(Manifest.permission.INTERNET), internetPermissionCode
             )
         } else {
-            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show()
             Timber.d("Permission Already Granted")
         }
     }
 }
+

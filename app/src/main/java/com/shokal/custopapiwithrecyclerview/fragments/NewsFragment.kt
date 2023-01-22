@@ -1,13 +1,11 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -27,6 +25,7 @@ class NewsFragment : Fragment() {
     private val binding get() = _binding!!
     private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
+    private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +86,6 @@ class NewsFragment : Fragment() {
                     )
                 }
             }
-
             viewModel.newsList.observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
@@ -109,11 +107,45 @@ class NewsFragment : Fragment() {
                     .show()
             }
         }
-
         viewModel.newsList.observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_item, menu)
+        val item = menu.findItem(R.id.actionSearch)
+        val searchView = item?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText)
+                return false
+            }
+        })
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun filter(text: String?) {
+        val filteredlist: MutableList<LocalArticle> = java.util.ArrayList()
+        for (item in listArticles) {
+            if (item.title?.lowercase()?.contains(text!!) == true) {
+                filteredlist.add(item)
+            }
+        }
+
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(requireContext(), "No News Found...", Toast.LENGTH_SHORT).show()
+        } else {
+
+        }
+
     }
 }

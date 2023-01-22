@@ -4,62 +4,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment2">
-
-    <fragment
-        android:id="@+id/bookMarkFragment"
-        android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment"
-        android:label="fragment_book_mark"
-        tools:layout="@layout/fragment_book_mark">
-        <action
-            android:id="@+id/action_bookMarkFragment_to_detailedNewsFragment"
-            app:destination="@id/detailedNewsFragment" />
-        <action
-            android:id="@+id/action_bookMarkFragment_to_homeFragment2"
-            app:destination="@id/homeFragment2" />
-    </fragment>
     <fragment
         android:id="@+id/homeFragment2"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.HomeFragment"
-        android:label="fragment_home"
+        android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment2_to_detailedNewsFragment"
             app:destination="@id/detailedNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookMarkFragment2"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment"
+        android:label="BookMarks"
+        tools:layout="@layout/fragment_book_mark">
         <action
-            android:id="@+id/action_homeFragment2_to_bookMarkFragment"
-            app:destination="@id/bookMarkFragment" />
+            android:id="@+id/action_bookMarkFragment2_to_detailedBookMarkNewsFragment"
+            app:destination="@id/detailedBookMarkNewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedNewsFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.DetailedNewsFragment"
-        android:label="fragment_detailed_news"
+        android:label="Detailed News"
         tools:layout="@layout/fragment_detailed_news">
         <action
-            android:id="@+id/action_detailedNewsFragment_to_bookMarkFragment"
-            app:destination="@id/bookMarkFragment" />
-        <argument
-            android:name="news"
-            app:argType="com.shokal.custopapiwithrecyclerview.models.LocalArticle"
-            app:nullable="true" />
-        <argument
-            android:name="bookmark"
-            app:argType="com.shokal.custopapiwithrecyclerview.models.BookMarkNews"
-            app:nullable="true" />
+            android:id="@+id/action_detailedNewsFragment_to_newsFragment2"
+            app:destination="@id/newsFragment2" />
         <action
-            android:id="@+id/action_detailedNewsFragment_to_homeFragment2"
-            app:destination="@id/homeFragment2" />
+            android:id="@+id/action_detailedNewsFragment_to_technologyFragment"
+            app:destination="@id/technologyFragment" />
+        <action
+            android:id="@+id/action_detailedNewsFragment_to_sportsFragment"
+            app:destination="@id/sportsFragment" />
+        <action
+            android:id="@+id/action_detailedNewsFragment_to_businessFragment2"
+            app:destination="@id/businessFragment2" />
         <action
             android:id="@+id/action_detailedNewsFragment_to_webViewFragment"
             app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_detailedNewsFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+        <argument
+            android:name="news"
+            app:argType="com.shokal.custopapiwithrecyclerview.models.LocalArticle" />
+    </fragment>
+    <fragment
+        android:id="@+id/businessFragment2"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.BusinessFragment"
+        android:label="Business"
+        tools:layout="@layout/fragment_business">
+        <action
+            android:id="@+id/action_businessFragment2_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsFragment2"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.NewsFragment"
+        android:label="All News"
+        tools:layout="@layout/fragment_news">
+        <action
+            android:id="@+id/action_newsFragment2_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sportsFragment"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.SportsFragment"
+        android:label="Sports News"
+        tools:layout="@layout/fragment_sports">
+        <action
+            android:id="@+id/action_sportsFragment_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/technologyFragment"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.TechnologyFragment"
+        android:label="Technology News"
+        tools:layout="@layout/fragment_technology">
+        <action
+            android:id="@+id/action_technologyFragment_to_detailedNewsFragment"
+            app:destination="@id/detailedNewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.WebViewFragment"
-        android:label="fragment_web_view"
+        android:label="Web View"
         tools:layout="@layout/fragment_web_view">
         <action
             android:id="@+id/action_webViewFragment_to_detailedNewsFragment"
             app:destination="@id/detailedNewsFragment" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailedBookMarkNewsFragment"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.DetailedBookMarkNewsFragment"
+        android:label="fragment_detailed_book_mark_news"
+        tools:layout="@layout/fragment_detailed_book_mark_news">
+        <action
+            android:id="@+id/action_detailedBookMarkNewsFragment_to_bookMarkFragment2"
+            app:destination="@id/bookMarkFragment2" />
+        <action
+            android:id="@+id/action_detailedBookMarkNewsFragment_to_bookMarkWebViewFragment"
+            app:destination="@id/bookMarkWebViewFragment" />
+        <argument
+            android:name="news"
+            app:argType="com.shokal.custopapiwithrecyclerview.models.BookMarkNews" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookMarkWebViewFragment"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkWebViewFragment"
+        android:label="fragment_book_mark_web_view"
+        tools:layout="@layout/fragment_book_mark_web_view">
+        <action
+            android:id="@+id/action_bookMarkWebViewFragment_to_detailedBookMarkNewsFragment"
+            app:destination="@id/detailedBookMarkNewsFragment" />
         <argument
             android:name="url"
             app:argType="string" />

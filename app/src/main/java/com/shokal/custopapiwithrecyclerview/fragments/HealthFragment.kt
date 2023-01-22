@@ -1,10 +1,9 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,22 +16,23 @@ import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 
-class TechnologyFragment : Fragment() {
+class HealthFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var refreshLayout: SwipeRefreshLayout
     private val viewModel: LocalNewsViewModel by viewModels()
     private val apiViewModel: NewsViewModel by viewModels()
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
-    private val result = mutableListOf<LocalArticle>()
     private var allEqual = false
+    private val result = mutableListOf<LocalArticle>()
+    private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_technology, container, false)
+    ): View {
+        _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -54,6 +54,7 @@ class TechnologyFragment : Fragment() {
             initializeAdapter()
             refreshLayout.isRefreshing = false
         }
+
     }
 
     private fun initializeAdapter() {
@@ -63,7 +64,7 @@ class TechnologyFragment : Fragment() {
     }
 
     private fun observeData() {
-        apiViewModel.technologyNews.observe(viewLifecycleOwner) { articles ->
+        apiViewModel.healthNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
                 it.url?.let { it1 ->
                     LocalArticle(
@@ -75,7 +76,7 @@ class TechnologyFragment : Fragment() {
                         it.title,
                         it1,
                         it.urlToImage,
-                        "technology",
+                        "health",
                         false
                     )
                 }?.let { it2 ->
@@ -84,7 +85,7 @@ class TechnologyFragment : Fragment() {
                     )
                 }
             }
-            viewModel.technologyNewsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.healthNewsList.observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -105,10 +106,42 @@ class TechnologyFragment : Fragment() {
                     .show()
             }
         }
-        viewModel.technologyNewsList.observe(viewLifecycleOwner) {
+        viewModel.healthNewsList.observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_item, menu)
+        val item = menu.findItem(R.id.actionSearch)
+        val searchView = item?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText)
+                return false
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun filter(text: String?) {
+        val filteredlist: MutableList<LocalArticle> = java.util.ArrayList()
+        for (item in listArticles) {
+            if (item.title?.lowercase()?.contains(text!!) == true) {
+                filteredlist.add(item)
+            }
+        }
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(requireContext(), "No News Found...", Toast.LENGTH_SHORT).show()
+        } else {
+
         }
     }
 }

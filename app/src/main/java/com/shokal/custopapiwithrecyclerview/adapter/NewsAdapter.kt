@@ -13,13 +13,10 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.utils.widget.ImageFilterButton
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
-import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
@@ -28,8 +25,15 @@ import com.squareup.picasso.Picasso
 class NewsAdapter(
     private val context: Context,
     private val viewModel: LocalNewsViewModel,
-    private val arrayList: ArrayList<LocalArticle>
+    private val list: List<LocalArticle>
 ) : RecyclerView.Adapter<NewsAdapter.ItemViewHolder>() {
+
+    fun serach(text: String?) {
+        filter(text)
+    }
+
+    private var tasksList = list
+
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.imageView)
         val title: TextView = view.findViewById(R.id.newsTitle)
@@ -48,7 +52,7 @@ class NewsAdapter(
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val news = arrayList[position]
+        val news = tasksList[position]
 
         if (!TextUtils.isEmpty(news.title)) {
             holder.title.text = news.title
@@ -98,17 +102,34 @@ class NewsAdapter(
         }
         holder.newsCard.setOnClickListener {
             Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
-            val action = HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
-                news,
-                null
-            )
-            holder.itemView.findNavController().navigate(
-                action
-            )
+            val action = HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(news)
+            Navigation.findNavController(holder.itemView).navigate(action)
         }
     }
 
+
     override fun getItemCount(): Int {
-        return arrayList.size
+        return tasksList.size
+    }
+
+    fun filterList(filterlist: List<LocalArticle>) {
+        tasksList = filterlist
+        notifyDataSetChanged()
+    }
+
+    private fun filter(text: String?) {
+        val filteredlist: MutableList<LocalArticle> = ArrayList()
+        for (item in list) {
+            if (item.title?.lowercase()?.contains(text!!) == true) {
+                filteredlist.add(item)
+            }
+        }
+
+        if (filteredlist.isEmpty()) {
+            Toast.makeText(context, "No News Found...", Toast.LENGTH_SHORT).show()
+        } else {
+            filterList(filteredlist)
+        }
+
     }
 }

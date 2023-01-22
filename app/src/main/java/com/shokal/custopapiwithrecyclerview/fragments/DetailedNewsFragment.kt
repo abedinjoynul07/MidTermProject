@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.shokal.custopapiwithrecyclerview.R
 import com.squareup.picasso.Picasso
@@ -32,41 +32,27 @@ class DetailedNewsFragment : Fragment() {
         val imageView = view.findViewById<ImageView>(R.id.newsImage)
         val continueButton = view.findViewById<Button>(R.id.continueButton)
 
-        if (!TextUtils.isEmpty(args.news?.title)) {
-            title.text = args.news?.title
-        } else if (!TextUtils.isEmpty(args.bookmark?.title)) {
-            title.text = args.news?.title
+        if (!TextUtils.isEmpty(args.news.title)) {
+            title.text = args.news.title
         } else {
             title.text = "No Name"
         }
 
-        if (!TextUtils.isEmpty(args.news?.description)) {
-            description.text = args.news?.description
-        } else if (!TextUtils.isEmpty(args.bookmark?.description)) {
-            description.text = args.news?.description
+        if (!TextUtils.isEmpty(args.news.description)) {
+            description.text = args.news.description
         } else {
             description.text = "No Description"
         }
 
-        if (!TextUtils.isEmpty(args.news?.content)) {
-            content.text = args.news?.content
-        } else if (!TextUtils.isEmpty(args.bookmark?.content)) {
-            content.text = args.news?.content
+        if (!TextUtils.isEmpty(args.news.content)) {
+            content.text = args.news.content
         } else {
             content.text = "No Content"
         }
 
-        if (!TextUtils.isEmpty(args.news?.content)) {
+        if (!TextUtils.isEmpty(args.news.content)) {
             Picasso.get()
-                .load(args.news?.urlToImage)
-                .placeholder(R.drawable.ic_connection_error)
-                .fit()
-                .centerCrop()
-                .centerCrop(1)
-                .into(imageView)
-        } else if (!TextUtils.isEmpty(args.bookmark?.content)) {
-            Picasso.get()
-                .load(args.bookmark?.urlToImage)
+                .load(args.news.urlToImage)
                 .placeholder(R.drawable.ic_connection_error)
                 .fit()
                 .centerCrop()
@@ -83,25 +69,15 @@ class DetailedNewsFragment : Fragment() {
         }
 
         continueButton.setOnClickListener {
-            if (!TextUtils.isEmpty(args.news?.content)) {
+            if (!TextUtils.isEmpty(args.news.url)) {
                 val action =
-                    args.news?.url?.let { it1 ->
+                    args.news.url?.let { it1 ->
                         DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
                             it1
                         )
                     }
                 if (action != null) {
-                    view.findNavController().navigate(action)
-                }
-            } else if (!TextUtils.isEmpty(args.bookmark?.content)) {
-                val action =
-                    args.bookmark?.url?.let { it1 ->
-                        DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
-                            it1
-                        )
-                    }
-                if (action != null) {
-                    view.findNavController().navigate(action)
+                    Navigation.findNavController(view).navigate(action)
                 }
             }
         }

@@ -16,6 +16,8 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
     var businesesNewsList: LiveData<List<LocalArticle>>
     var sportsNewsList: LiveData<List<LocalArticle>>
     var technologyNewsList: LiveData<List<LocalArticle>>
+    var scienceNewsList: LiveData<List<LocalArticle>>
+    var healthNewsList: LiveData<List<LocalArticle>>
     var newsRepo: NewsRepository
 
     init {
@@ -25,6 +27,8 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
         businesesNewsList = newsRepo.getBusinessNews()
         sportsNewsList = newsRepo.getSportsNews()
         technologyNewsList = newsRepo.getTechnologyNews()
+        scienceNewsList = newsRepo.getScienceNews()
+        healthNewsList = newsRepo.getHealthNews()
     }
 
     fun addBookMarkArticle(article: BookMarkNews) {
@@ -36,6 +40,12 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
     fun addAllArticle(article: List<LocalArticle>) {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepo.insertAllArticle(article)
+        }
+    }
+
+    fun deleteAllNews() {
+        viewModelScope.launch(Dispatchers.IO) {
+            newsRepo.deleteAllNews()
         }
     }
 }

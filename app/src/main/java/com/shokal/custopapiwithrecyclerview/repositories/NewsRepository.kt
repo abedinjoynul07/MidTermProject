@@ -29,9 +29,12 @@ class NewsRepository(context: Context) {
         return db.getAllTechnology()
     }
 
-    // Insert new user
-    suspend fun insertArticle(article: LocalArticle) {
-        return db.insert(article)
+    fun getScienceNews(): LiveData<List<LocalArticle>> {
+        return db.getAllScience()
+    }
+
+    fun getHealthNews(): LiveData<List<LocalArticle>> {
+        return db.getAllHealth()
     }
 
     suspend fun insertBookMarkArticle(article: BookMarkNews) {
@@ -43,8 +46,8 @@ class NewsRepository(context: Context) {
     }
 
     // Delete user
-    suspend fun deleteUser(article: LocalArticle) {
-        db.delete(article)
+    suspend fun deleteAllNews() {
+        db.deleteAll()
     }
 
 }

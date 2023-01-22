@@ -13,13 +13,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.utils.widget.ImageFilterButton
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
-import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
-import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
@@ -98,12 +93,12 @@ class SportsNewsAdapter(
         }
         holder.newsCard.setOnClickListener {
             Toast.makeText(context, "Card Clicked From Sports", Toast.LENGTH_SHORT).show()
-            holder.itemView.findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
-                    news,
-                    null
-                )
-            )
+//            holder.itemView.findNavController().navigate(
+//                HomeFragmentDirections.actionHomeFragment2ToDetailedNewsFragment(
+//                    news,
+//                    null
+//                )
+//            )
         }
     }
 

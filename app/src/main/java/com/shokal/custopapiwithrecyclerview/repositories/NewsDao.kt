@@ -22,6 +22,12 @@ interface NewsDao {
     @Query("SELECT * FROM articles WHERE category = 'technology'")
     fun getAllTechnology(): LiveData<List<LocalArticle>>
 
+    @Query("SELECT * FROM articles WHERE category = 'science'")
+    fun getAllScience(): LiveData<List<LocalArticle>>
+
+    @Query("SELECT * FROM articles WHERE category = 'health'")
+    fun getAllHealth(): LiveData<List<LocalArticle>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(article: LocalArticle)
 

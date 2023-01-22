@@ -1,21 +1,19 @@
 package com.shokal.custopapiwithrecyclerview.adapter
 
+//import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragmentDirections
+//import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
 import android.content.Context
-import android.os.Build
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragmentDirections
-import com.shokal.custopapiwithrecyclerview.fragments.HomeFragmentDirections
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
@@ -65,29 +63,19 @@ class BookMarkAdapter(
             holder.date.text = "No Date"
         }
         if (!TextUtils.isEmpty(news.urlToImage)) {
-            Picasso.get()
-                .load(news.urlToImage)
-                .fit()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_connection_error)
-                .centerCrop(1)
-                .centerCrop()
-                .into(holder.image)
+            Picasso.get().load(news.urlToImage).fit().placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_connection_error).centerCrop(1).centerCrop().into(holder.image)
         } else {
-            Picasso.get()
-                .load(R.drawable.ic_connection_error)
-                .fit()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_connection_error)
-                .centerCrop(1)
-                .centerCrop()
-                .into(holder.image)
+            Picasso.get().load(R.drawable.ic_connection_error).fit()
+                .placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
+                .centerCrop(1).centerCrop().into(holder.image)
         }
         holder.newsCard.setOnClickListener {
             val action =
-                BookMarkFragmentDirections.actionBookMarkFragmentToDetailedNewsFragment(null, news)
-            holder.itemView.findNavController().navigate(action)
-            Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+                BookMarkFragmentDirections.actionBookMarkFragment2ToDetailedBookMarkNewsFragment(
+                    news
+                )
+            Navigation.findNavController(holder.itemView).navigate(action)
         }
     }
 

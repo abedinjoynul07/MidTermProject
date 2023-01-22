@@ -8,14 +8,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/actionSearch"
-        android:icon="@drawable/baseline_search_24"
-        android:title="Search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
-
-    <item
-        android:id="@+id/bookMarkFragment"
+        android:id="@+id/bookMarkFragment2"
         android:icon="@drawable/baseline_bookmarks_24"
         android:title="BookMark"
         app:showAsAction="always" />
