@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.shokal.custopapiwithrecyclerview.BuildConfig
 import com.shokal.custopapiwithrecyclerview.models.Article
 import com.shokal.custopapiwithrecyclerview.services.NewsApi
@@ -41,7 +42,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun getNews() {
-        GlobalScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _status.postValue(NewsApiStatus.LOADING)
             try {
                 _news.postValue(

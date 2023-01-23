@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/homeFragment2"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/baseline_home_24"
         android:title="Home"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/bookMarkFragment2"
+        android:id="@+id/bookMarkFragment"
         android:icon="@drawable/baseline_collections_bookmark_24"
         android:title="BookMark"
         app:showAsAction="always" />

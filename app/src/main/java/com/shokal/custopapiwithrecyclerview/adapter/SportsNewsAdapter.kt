@@ -78,7 +78,6 @@ class SportsNewsAdapter(
 
         holder.favButton.setOnClickListener {
             val bookmarkNews = BookMarkNews(
-                0,
                 news.author,
                 news.content,
                 news.description,

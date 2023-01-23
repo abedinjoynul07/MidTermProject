@@ -49,7 +49,7 @@
                 android:layout_height="78dp"
                 android:layout_margin="10dp"
                 android:ellipsize="end"
-                android:maxLines="4"
+                android:maxLines="3"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -127,7 +127,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/date"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/baseline_bookmark_border_24"
+                    app:srcCompat="@drawable/baseline_bookmark_remove_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,13 +28,13 @@ interface NewsDao {
     @Query("SELECT * FROM articles WHERE category = 'health'")
     fun getAllHealth(): LiveData<List<LocalArticle>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(article: LocalArticle)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBookMark(article: BookMarkNews)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(articles: List<LocalArticle>)
 
     @Update

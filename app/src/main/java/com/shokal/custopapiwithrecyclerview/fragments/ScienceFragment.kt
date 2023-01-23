@@ -1,5 +1,6 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -26,15 +27,19 @@ class ScienceFragment : Fragment() {
     private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
     private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
+    private lateinit var progressBar: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        progressBar = ProgressDialog(requireContext())
+        progressBar.setCancelable(false)
+        progressBar.setMessage("Fetching Data...")
+
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
@@ -60,6 +65,7 @@ class ScienceFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_item, menu)
         val item = menu.findItem(R.id.actionSearch)
         val searchView = item?.actionView as SearchView
@@ -88,26 +94,23 @@ class ScienceFragment : Fragment() {
     private fun observeData() {
         apiViewModel.scienceNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
-                it.url?.let { it1 ->
-                    LocalArticle(
-                        0,
-                        it.author,
-                        it.content,
-                        it.description,
-                        it.publishedAt,
-                        it.title,
-                        it1,
-                        it.urlToImage,
-                        "science",
-                        false
-                    )
-                }?.let { it2 ->
+                LocalArticle(
+                    it.author,
+                    it.content,
+                    it.description,
+                    it.publishedAt,
+                    it.title,
+                    it.url,
+                    it.urlToImage,
+                    "science",
+                    false
+                ).let { it2 ->
                     result.add(
                         it2
                     )
                 }
             }
-            viewModel.scienceNewsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.getScienceNews().observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -123,11 +126,10 @@ class ScienceFragment : Fragment() {
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "Up to dated...", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Up to dated...", Toast.LENGTH_SHORT).show()
             }
         }
-        viewModel.scienceNewsList.observe(viewLifecycleOwner) {
+        viewModel.getScienceNews().observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )

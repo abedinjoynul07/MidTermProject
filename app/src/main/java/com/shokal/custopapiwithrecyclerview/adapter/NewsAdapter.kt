@@ -88,7 +88,6 @@ class NewsAdapter(
 
         holder.favButton.setOnClickListener {
             val article = LocalArticle(
-                0,
                 news.author,
                 news.content,
                 news.description,
@@ -102,7 +101,6 @@ class NewsAdapter(
             viewModel.updateArticle(article)
 
             val bookmarkNews = BookMarkNews(
-                0,
                 news.author,
                 news.content,
                 news.description,

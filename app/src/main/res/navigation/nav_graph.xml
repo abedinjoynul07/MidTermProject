@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment2">
+    app:startDestination="@id/homeFragment">
     <fragment
-        android:id="@+id/homeFragment2"
+        android:id="@+id/homeFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
@@ -14,7 +14,7 @@
             app:destination="@id/detailedNewsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/bookMarkFragment2"
+        android:id="@+id/bookMarkFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragment"
         android:label="BookMarks"
         tools:layout="@layout/fragment_book_mark">
@@ -44,7 +44,7 @@
             app:destination="@id/webViewFragment" />
         <action
             android:id="@+id/action_detailedNewsFragment_to_homeFragment2"
-            app:destination="@id/homeFragment2" />
+            app:destination="@id/homeFragment" />
         <argument
             android:name="news"
             app:argType="com.shokal.custopapiwithrecyclerview.models.LocalArticle" />
@@ -96,6 +96,12 @@
         <argument
             android:name="url"
             app:argType="string" />
+        <action
+            android:id="@+id/action_webViewFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_webViewFragment_to_bookMarkFragment"
+            app:destination="@id/bookMarkFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedBookMarkNewsFragment"
@@ -104,7 +110,7 @@
         tools:layout="@layout/fragment_detailed_book_mark_news">
         <action
             android:id="@+id/action_detailedBookMarkNewsFragment_to_bookMarkFragment2"
-            app:destination="@id/bookMarkFragment2" />
+            app:destination="@id/bookMarkFragment" />
         <action
             android:id="@+id/action_detailedBookMarkNewsFragment_to_bookMarkWebViewFragment"
             app:destination="@id/bookMarkWebViewFragment" />

@@ -8,7 +8,6 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "articles")
 @Parcelize
 data class LocalArticle(
-    val id: Int,
     val author: String?,
     val content: String?,
     val description: String?,

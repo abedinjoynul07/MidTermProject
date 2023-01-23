@@ -4,12 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -42,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         checkPermission()
         viewModel = ViewModelProvider(this)[LocalNewsViewModel::class.java]
-        viewModel.newsList.observe(this) {
+        viewModel.getNews().observe(this) {
             listArticles.addAll(it)
         }
 
@@ -52,13 +49,9 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment2, R.id.bookMarkFragment2
+                R.id.homeFragment, R.id.bookMarkFragment
             )
         )
-
-        if (WebViewFragment().isAdded or BookMarkWebViewFragment().isAdded) {
-            binding.navView.visibility = View.INVISIBLE
-        }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

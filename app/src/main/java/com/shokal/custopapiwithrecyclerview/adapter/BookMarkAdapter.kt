@@ -31,7 +31,8 @@ class BookMarkAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val root = LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false)
+        val root =
+            LayoutInflater.from(parent.context).inflate(R.layout.book_mark_list_item, parent, false)
         return ItemViewHolder(root)
     }
 

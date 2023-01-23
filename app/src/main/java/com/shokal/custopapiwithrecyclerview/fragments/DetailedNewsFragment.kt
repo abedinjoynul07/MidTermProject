@@ -17,8 +17,7 @@ import com.squareup.picasso.Picasso
 class DetailedNewsFragment : Fragment() {
     private val args: DetailedNewsFragmentArgs by navArgs()
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detailed_news, container, false)
@@ -47,30 +46,20 @@ class DetailedNewsFragment : Fragment() {
             content.text = "No Content"
         }
         if (!TextUtils.isEmpty(args.news.content)) {
-            Picasso.get()
-                .load(args.news.urlToImage)
-                .placeholder(R.drawable.ic_connection_error)
-                .fit()
-                .centerCrop()
-                .centerCrop(1)
-                .into(imageView)
+            Picasso.get().load(args.news.urlToImage).placeholder(R.drawable.ic_connection_error)
+                .fit().centerCrop().centerCrop(1).into(imageView)
         } else {
-            Picasso.get()
-                .load(R.drawable.ic_connection_error)
-                .placeholder(R.drawable.ic_connection_error)
-                .fit()
-                .centerCrop()
-                .centerCrop(1)
+            Picasso.get().load(R.drawable.ic_connection_error)
+                .placeholder(R.drawable.ic_connection_error).fit().centerCrop().centerCrop(1)
                 .into(imageView)
         }
         continueButton.setOnClickListener {
             if (!TextUtils.isEmpty(args.news.url)) {
-                val action =
-                    args.news.url?.let { it1 ->
-                        DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
-                            it1
-                        )
-                    }
+                val action = args.news.url.let { it1 ->
+                    DetailedNewsFragmentDirections.actionDetailedNewsFragmentToWebViewFragment(
+                        it1
+                    )
+                }
                 if (action != null) {
                     Navigation.findNavController(view).navigate(action)
                 }

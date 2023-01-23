@@ -1,5 +1,6 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -25,10 +26,15 @@ class SportsFragment : Fragment() {
     private val binding get() = _binding!!
     private val result = mutableListOf<LocalArticle>()
     private var allEqual = false
+    private lateinit var progressBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        progressBar = ProgressDialog(requireContext())
+        progressBar.setCancelable(false)
+        progressBar.setMessage("Fetching Data...")
+
     }
 
     override fun onCreateView(
@@ -39,25 +45,6 @@ class SportsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_sports, container, false)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_item, menu)
-        val item = menu.findItem(R.id.actionSearch)
-        val searchView = item?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    val adapter = recyclerView.adapter as NewsAdapter
-                    adapter.filter(newText)
-                }
-                return false
-            }
-        })
-        super.onCreateOptionsMenu(menu, inflater)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -78,6 +65,28 @@ class SportsFragment : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
+        inflater.inflate(R.menu.menu_item, menu)
+        val item = menu.findItem(R.id.actionSearch)
+        val searchView = item?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    val adapter = recyclerView.adapter as NewsAdapter
+                    adapter.filter(newText)
+                }
+                return false
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
     private fun initializeAdapter() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.visibility = View.VISIBLE
@@ -87,26 +96,23 @@ class SportsFragment : Fragment() {
     private fun observeData() {
         apiViewModel.sportsNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
-                it.url?.let { it1 ->
-                    LocalArticle(
-                        0,
-                        it.author,
-                        it.content,
-                        it.description,
-                        it.publishedAt,
-                        it.title,
-                        it1,
-                        it.urlToImage,
-                        "sports",
-                        false
-                    )
-                }?.let { it2 ->
+                LocalArticle(
+                    it.author,
+                    it.content,
+                    it.description,
+                    it.publishedAt,
+                    it.title,
+                    it.url,
+                    it.urlToImage,
+                    "sports",
+                    false
+                ).let { it2 ->
                     result.add(
                         it2
                     )
                 }
             }
-            viewModel.sportsNewsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.getSportsNews().observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -126,7 +132,7 @@ class SportsFragment : Fragment() {
                     .show()
             }
         }
-        viewModel.sportsNewsList.observe(viewLifecycleOwner) {
+        viewModel.getSportsNews().observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )

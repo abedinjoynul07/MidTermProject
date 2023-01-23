@@ -1,9 +1,11 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,10 +27,15 @@ class BusinessFragment : Fragment() {
     private val binding get() = _binding!!
     private val result = mutableListOf<LocalArticle>()
     private var allEqual = false
+    private lateinit var progressBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        progressBar = ProgressDialog(requireContext())
+        progressBar.setCancelable(false)
+        progressBar.setMessage("Fetching Data...")
+
     }
 
     override fun onCreateView(
@@ -39,6 +46,7 @@ class BusinessFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_item, menu)
         val item = menu.findItem(R.id.actionSearch)
         val searchView = item?.actionView as SearchView
@@ -58,6 +66,7 @@ class BusinessFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -70,11 +79,24 @@ class BusinessFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
+        progressBar.show()
         initializeAdapter()
+        progressBar.dismiss()
         refreshLayout.setOnRefreshListener {
+            progressBar.show()
             initializeAdapter()
+            progressBar.dismiss()
             refreshLayout.isRefreshing = false
         }
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    recyclerView.marginBottom
+                }
+            }
+        })
 
     }
 
@@ -87,26 +109,23 @@ class BusinessFragment : Fragment() {
     private fun observeData() {
         apiViewModel.businessNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
-                it.url?.let { it1 ->
-                    LocalArticle(
-                        0,
-                        it.author,
-                        it.content,
-                        it.description,
-                        it.publishedAt,
-                        it.title,
-                        it1,
-                        it.urlToImage,
-                        "business",
-                        false
-                    )
-                }?.let { it2 ->
+                LocalArticle(
+                    it.author,
+                    it.content,
+                    it.description,
+                    it.publishedAt,
+                    it.title,
+                    it.url,
+                    it.urlToImage,
+                    "business",
+                    false
+                ).let { it2 ->
                     result.add(
                         it2
                     )
                 }
             }
-            viewModel.businesesNewsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.getBusinessNews().observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -122,11 +141,10 @@ class BusinessFragment : Fragment() {
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "Noting news Found...", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Noting news Found...", Toast.LENGTH_SHORT).show()
             }
         }
-        viewModel.businesesNewsList.observe(viewLifecycleOwner) {
+        viewModel.getBusinessNews().observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )

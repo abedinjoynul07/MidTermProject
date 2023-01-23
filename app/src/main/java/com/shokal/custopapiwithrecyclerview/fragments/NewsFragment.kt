@@ -1,5 +1,6 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -27,22 +28,28 @@ class NewsFragment : Fragment() {
     private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
     private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
+    private lateinit var progressBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        progressBar = ProgressDialog(requireContext())
+        progressBar.setCancelable(false)
+        progressBar.setMessage("Fetching Data...")
+
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_item, menu)
         val item = menu.findItem(R.id.actionSearch)
         val searchView = item?.actionView as SearchView
@@ -74,9 +81,15 @@ class NewsFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.isDrawingCacheEnabled = true
         recyclerView.setItemViewCacheSize(900)
+
+        progressBar.show()
         initializeAdapter()
+        progressBar.dismiss()
+
         refreshLayout.setOnRefreshListener {
+            progressBar.show()
             initializeAdapter()
+            progressBar.dismiss()
             refreshLayout.isRefreshing = false
         }
 
@@ -84,32 +97,37 @@ class NewsFragment : Fragment() {
 
     private fun initializeAdapter() {
         recyclerView.layoutManager = LinearLayoutManager(context)
-        observeData()
+        viewModel.getNews().observe(viewLifecycleOwner) {
+            Log.d("local", it.toString())
+            if (it.size > 0) {
+                loadData()
+            } else {
+                observeData()
+            }
+        }
     }
 
     private fun observeData() {
+        Toast.makeText(requireContext(), "Called Api", Toast.LENGTH_SHORT).show()
         apiViewModel.news.observe(viewLifecycleOwner) { articles ->
             articles.map {
-                it.url.let { it1 ->
-                    LocalArticle(
-                        0,
-                        it.author,
-                        it.content,
-                        it.description,
-                        it.publishedAt,
-                        it.title,
-                        it1,
-                        it.urlToImage,
-                        "general",
-                        false
-                    )
-                }.let { it2 ->
+                LocalArticle(
+                    it.author,
+                    it.content,
+                    it.description,
+                    it.publishedAt,
+                    it.title,
+                    it.url,
+                    it.urlToImage,
+                    "general",
+                    false
+                ).let { it2 ->
                     result.add(
                         it2
                     )
                 }
             }
-            viewModel.newsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.getNews().observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -125,16 +143,21 @@ class NewsFragment : Fragment() {
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "Up to dated...", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Up to dated...", Toast.LENGTH_SHORT).show()
             }
         }
-        viewModel.newsList.observe(viewLifecycleOwner) {
+        viewModel.getNews().observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )
         }
+    }
 
-
+    private fun loadData() {
+        viewModel.getNews().observe(viewLifecycleOwner) {
+            recyclerView.adapter = NewsAdapter(
+                requireContext(), viewModel, it as ArrayList<LocalArticle>
+            )
+        }
     }
 }

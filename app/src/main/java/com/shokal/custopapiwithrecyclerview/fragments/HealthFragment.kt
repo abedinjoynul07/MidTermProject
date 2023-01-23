@@ -1,5 +1,6 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -26,21 +27,51 @@ class HealthFragment : Fragment() {
     private var allEqual = false
     private val result = mutableListOf<LocalArticle>()
     private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
+    private lateinit var progressBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        progressBar = ProgressDialog(requireContext())
+        progressBar.setCancelable(false)
+        progressBar.setMessage("Fetching Data...")
+
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.photos_grid)
+        refreshLayout = view.findViewById(R.id.swipeLayout)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.isDrawingCacheEnabled = true
+        recyclerView.setItemViewCacheSize(900)
+        progressBar.show()
+        initializeAdapter()
+        progressBar.dismiss()
+        refreshLayout.setOnRefreshListener {
+            progressBar.show()
+            initializeAdapter()
+            progressBar.dismiss()
+            refreshLayout.isRefreshing = false
+        }
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.clear()
         inflater.inflate(R.menu.menu_item, menu)
         val item = menu.findItem(R.id.actionSearch)
         val searchView = item?.actionView as SearchView
@@ -60,27 +91,6 @@ class HealthFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.photos_grid)
-        refreshLayout = view.findViewById(R.id.swipeLayout)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.isDrawingCacheEnabled = true
-        recyclerView.setItemViewCacheSize(900)
-        initializeAdapter()
-        refreshLayout.setOnRefreshListener {
-            initializeAdapter()
-            refreshLayout.isRefreshing = false
-        }
-
-    }
-
-
     private fun initializeAdapter() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.visibility = View.VISIBLE
@@ -90,26 +100,23 @@ class HealthFragment : Fragment() {
     private fun observeData() {
         apiViewModel.healthNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
-                it.url?.let { it1 ->
-                    LocalArticle(
-                        0,
-                        it.author,
-                        it.content,
-                        it.description,
-                        it.publishedAt,
-                        it.title,
-                        it1,
-                        it.urlToImage,
-                        "health",
-                        false
-                    )
-                }?.let { it2 ->
+                LocalArticle(
+                    it.author,
+                    it.content,
+                    it.description,
+                    it.publishedAt,
+                    it.title,
+                    it.url,
+                    it.urlToImage,
+                    "health",
+                    false
+                ).let { it2 ->
                     result.add(
                         it2
                     )
                 }
             }
-            viewModel.healthNewsList.observe(viewLifecycleOwner) { articles ->
+            viewModel.getHealthNews().observe(viewLifecycleOwner) { articles ->
                 articles.map { localNews ->
                     apiViewModel.news.observe(viewLifecycleOwner) { apiArticles ->
                         apiArticles.map {
@@ -125,11 +132,10 @@ class HealthFragment : Fragment() {
             if (!allEqual) {
                 viewModel.addAllArticle(result)
             } else {
-                Toast.makeText(requireContext(), "Up to Dated..", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Up to Dated..", Toast.LENGTH_SHORT).show()
             }
         }
-        viewModel.healthNewsList.observe(viewLifecycleOwner) {
+        viewModel.getHealthNews().observe(viewLifecycleOwner) {
             recyclerView.adapter = NewsAdapter(
                 requireContext(), viewModel, it as ArrayList<LocalArticle>
             )

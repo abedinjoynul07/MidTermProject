@@ -1,8 +1,9 @@
 package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.widget.SearchView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.adapter.BookMarkAdapter
-import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.FragmentBookMarkBinding
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
@@ -22,11 +22,6 @@ class BookMarkFragment : Fragment() {
     private var _binding: FragmentBookMarkBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -34,25 +29,6 @@ class BookMarkFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_item, menu)
-        val item = menu.findItem(R.id.actionSearch)
-        val searchView = item?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    val adapter = recyclerView.adapter as NewsAdapter
-                    adapter.filter(newText)
-                }
-                return false
-            }
-        })
-        super.onCreateOptionsMenu(menu, inflater)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

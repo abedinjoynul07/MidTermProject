@@ -8,7 +8,6 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "bookmarks")
 @Parcelize
 data class BookMarkNews(
-    val id: Int,
     val author: String?,
     val content: String?,
     val description: String?,
