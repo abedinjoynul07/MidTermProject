@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.utils.widget.ImageFilterButton
@@ -22,7 +21,7 @@ import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class NewsAdapter(
     private val context: Context,
@@ -107,7 +106,8 @@ class NewsAdapter(
                 news.publishedAt,
                 news.title,
                 news.url,
-                news.urlToImage
+                news.urlToImage,
+                news.category
             )
             viewModel.addBookMarkArticle(bookmarkNews)
         }

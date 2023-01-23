@@ -95,7 +95,7 @@ class TechnologyFragment : Fragment() {
         observeData()
     }
 
-    private fun observeData() {
+    fun observeData() {
         apiViewModel.technologyNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
                 LocalArticle(

@@ -93,7 +93,7 @@ class SportsFragment : Fragment() {
         observeData()
     }
 
-    private fun observeData() {
+    fun observeData() {
         apiViewModel.sportsNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
                 LocalArticle(

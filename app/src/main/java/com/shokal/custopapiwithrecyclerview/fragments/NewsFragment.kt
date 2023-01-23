@@ -2,7 +2,6 @@ package com.shokal.custopapiwithrecyclerview.fragments
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -17,6 +16,7 @@ import com.shokal.custopapiwithrecyclerview.databinding.FragmentNewsBinding
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
+import kotlinx.coroutines.Job
 
 class NewsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
@@ -26,6 +26,7 @@ class NewsFragment : Fragment() {
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
     private var allEqual = false
+    private val job = Job()
     private val result = mutableListOf<LocalArticle>()
     private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
     private lateinit var progressBar: ProgressDialog
@@ -72,6 +73,7 @@ class NewsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        job.cancel()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,10 +97,9 @@ class NewsFragment : Fragment() {
 
     }
 
-    private fun initializeAdapter() {
+    fun initializeAdapter() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         viewModel.getNews().observe(viewLifecycleOwner) {
-            Log.d("local", it.toString())
             if (it.size > 0) {
                 loadData()
             } else {
@@ -107,7 +108,7 @@ class NewsFragment : Fragment() {
         }
     }
 
-    private fun observeData() {
+    fun observeData() {
         Toast.makeText(requireContext(), "Called Api", Toast.LENGTH_SHORT).show()
         apiViewModel.news.observe(viewLifecycleOwner) { articles ->
             articles.map {

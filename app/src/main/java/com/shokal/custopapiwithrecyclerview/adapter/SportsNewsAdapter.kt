@@ -84,7 +84,8 @@ class SportsNewsAdapter(
                 news.publishedAt,
                 news.title,
                 news.url,
-                news.urlToImage
+                news.urlToImage,
+                news.category
             )
             viewModel.addBookMarkArticle(bookmarkNews)
         }
@@ -97,7 +98,6 @@ class SportsNewsAdapter(
 //                )
 //            )
 //        }
-
     }
 
     override fun getItemCount(): Int {

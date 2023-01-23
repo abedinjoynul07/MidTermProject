@@ -41,19 +41,19 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun getNews() {
+    fun getNews() {
         viewModelScope.launch(Dispatchers.IO) {
             _status.postValue(NewsApiStatus.LOADING)
             try {
                 _news.postValue(
                     NewsApi.retrofitService.getAllNews(
                         BuildConfig.API_KEY,
-                        "general"
+                        "bitcoin"
                     ).articles
                 )
                 _businessNews.postValue(
                     NewsApi.retrofitService.getBusinessNews(
-                        BuildConfig.API_KEY, "business"
+                        BuildConfig.API_KEY, "entertainment"
                     ).articles
                 )
                 _sportsNews.postValue(

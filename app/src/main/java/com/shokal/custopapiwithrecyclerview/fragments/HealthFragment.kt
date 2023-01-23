@@ -97,7 +97,7 @@ class HealthFragment : Fragment() {
         observeData()
     }
 
-    private fun observeData() {
+    fun observeData() {
         apiViewModel.healthNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
                 LocalArticle(

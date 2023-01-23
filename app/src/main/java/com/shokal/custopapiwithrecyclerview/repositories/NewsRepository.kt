@@ -48,8 +48,12 @@ class NewsRepository(context: Context) {
         db.update(article)
     }
 
-    // Delete user
+    // Delete Articles
     suspend fun deleteAllNews() {
         db.deleteAll()
+    }
+
+    suspend fun deleteBookMarKArticle(bookMarkNews: BookMarkNews) {
+        db.deleteBookMarKArticle(bookMarkNews)
     }
 }

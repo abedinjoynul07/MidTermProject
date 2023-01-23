@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -13,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shokal.custopapiwithrecyclerview.R
 import com.shokal.custopapiwithrecyclerview.fragments.BookMarkFragmentDirections
 import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
+import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
+import timber.log.Timber
 
 class BookMarkAdapter(
     private val context: Context,
@@ -28,6 +31,7 @@ class BookMarkAdapter(
         val authorName: TextView = view.findViewById(R.id.authorName)
         val date: TextView = view.findViewById(R.id.date)
         val newsCard: CardView = view.findViewById(R.id.cardViewNews)
+        val favouriteButton: ImageButton = view.findViewById(R.id.favouriteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -69,6 +73,26 @@ class BookMarkAdapter(
                 .placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
                 .centerCrop(1).centerCrop().into(holder.image)
         }
+        holder.favouriteButton.setOnClickListener {
+            val article = LocalArticle(
+                news.author,
+                news.content,
+                news.description,
+                news.publishedAt,
+                news.title,
+                news.url,
+                news.urlToImage,
+                news.category,
+                false
+            )
+            try {
+                viewModel.updateArticle(article)
+            } catch (e: Exception) {
+                Timber.tag("update").d(e.message.toString())
+            }
+            viewModel.deleteBookBarkArticle(news)
+        }
+
         holder.newsCard.setOnClickListener {
             val action =
                 BookMarkFragmentDirections.actionBookMarkFragment2ToDetailedBookMarkNewsFragment(

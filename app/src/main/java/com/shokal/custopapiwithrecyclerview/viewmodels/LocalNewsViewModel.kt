@@ -66,6 +66,12 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    fun deleteBookBarkArticle(bookMarkNews: BookMarkNews) {
+        viewModelScope.launch {
+            newsRepo.deleteBookMarKArticle(bookMarkNews)
+        }
+    }
+
     fun deleteAllNews() {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepo.deleteAllNews()

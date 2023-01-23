@@ -91,7 +91,7 @@ class ScienceFragment : Fragment() {
         observeData()
     }
 
-    private fun observeData() {
+    fun observeData() {
         apiViewModel.scienceNews.observe(viewLifecycleOwner) { articles ->
             articles.map {
                 LocalArticle(

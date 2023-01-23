@@ -4,31 +4,27 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.shokal.custopapiwithrecyclerview.adapter.NewsAdapter
 import com.shokal.custopapiwithrecyclerview.databinding.ActivityMainBinding
-import com.shokal.custopapiwithrecyclerview.fragments.BookMarkWebViewFragment
-import com.shokal.custopapiwithrecyclerview.fragments.WebViewFragment
-import com.shokal.custopapiwithrecyclerview.models.LocalArticle
-import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
+import com.shokal.custopapiwithrecyclerview.workers.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: LocalNewsViewModel
     private lateinit var navController: NavController
-    private var listArticles: ArrayList<LocalArticle> = ArrayList()
     var adapter: NewsAdapter? = null
     private val internetPermissionCode = 100
 
@@ -38,12 +34,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         checkPermission()
-        viewModel = ViewModelProvider(this)[LocalNewsViewModel::class.java]
-        viewModel.getNews().observe(this) {
-            listArticles.addAll(it)
-        }
 
-        adapter = NewsAdapter(this, viewModel, listArticles)
+//        val handler = Handler()
+//        val runnableCode: Runnable = object : Runnable {
+//            override fun run() {
+//                Toast.makeText(this@MainActivity, "Toast from handler", Toast.LENGTH_SHORT).show()
+//                NewsFragment()
+//                handler.postDelayed(this, 5000)
+//            }
+//        }
+//        handler.post(runnableCode)
+
+        setPeriodicWorkRequest()
+
         val navView: BottomNavigationView = binding.navView
 
         navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -60,24 +63,32 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.menu_item, menu)
-//        val item = menu?.findItem(R.id.actionSearch)
-//        val searchView = item?.actionView as SearchView
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
+    private fun setPeriodicWorkRequest() {
+        val workManager = WorkManager.getInstance(applicationContext)
+//        val businessDataLoad = PeriodicWorkRequest
+//            .Builder(LoadBusinessData::class.java, 15, TimeUnit.MINUTES)
+//            .build()
 //
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                if (newText != null) {
-//                    adapter?.filter(newText)
-//                }
-//                return false
-//            }
-//        })
-//        return super.onCreateOptionsMenu(menu)
-//    }
+//        val healthDataLoad = PeriodicWorkRequest
+//            .Builder(LoadHealthData::class.java, 15, TimeUnit.MINUTES)
+//            .build()
+//
+//        val newsDataLoad = PeriodicWorkRequest
+//            .Builder(DataFetchWorker::class.java, 15, TimeUnit.MINUTES)
+//            .build()
+//
+//        val scienceDataLoad = PeriodicWorkRequest
+//            .Builder(LoadScienceData::class.java, 15, TimeUnit.MINUTES)
+//            .build()
+//
+//        val sportsDataLoad = PeriodicWorkRequest
+//            .Builder(LoadSportsData::class.java, 15, TimeUnit.MINUTES)
+//            .build()
+
+        val dataLoad =
+            PeriodicWorkRequest.Builder(DataFetchWorker::class.java, 15, TimeUnit.MINUTES).build()
+        workManager.enqueue(dataLoad)
+    }
 
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(
