@@ -21,17 +21,14 @@ import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NewsAdapter(
     private val context: Context,
     private val viewModel: LocalNewsViewModel,
     private val list: List<LocalArticle>
 ) : RecyclerView.Adapter<NewsAdapter.ItemViewHolder>() {
-
-    fun serach(text: String?) {
-        filter(text)
-    }
-
     private var tasksList = list
 
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -83,7 +80,27 @@ class NewsAdapter(
                 .centerCrop(1).centerCrop().into(holder.image)
         }
 
+        if (news.isFavourite) {
+            holder.favButton.setImageResource(R.drawable.baseline_bookmark_24)
+        } else {
+            holder.favButton.setImageResource(R.drawable.baseline_bookmark_border_24)
+        }
+
         holder.favButton.setOnClickListener {
+            val article = LocalArticle(
+                0,
+                news.author,
+                news.content,
+                news.description,
+                news.publishedAt,
+                news.title,
+                news.url,
+                news.urlToImage,
+                news.category,
+                true
+            )
+            viewModel.updateArticle(article)
+
             val bookmarkNews = BookMarkNews(
                 0,
                 news.author,
@@ -112,18 +129,15 @@ class NewsAdapter(
         notifyDataSetChanged()
     }
 
-    private fun filter(text: String?) {
-        val filteredlist: MutableList<LocalArticle> = ArrayList()
-        for (item in list) {
-            if (item.title?.lowercase()?.contains(text!!) == true) {
-                filteredlist.add(item)
+    fun filter(text: String) {
+        val filteredList = ArrayList<LocalArticle>()
+        for (article in list) {
+            if (article.title?.lowercase(Locale.ROOT)
+                    ?.contains(text.lowercase(Locale.ROOT)) == true
+            ) {
+                filteredList.add(article)
             }
         }
-        if (filteredlist.isEmpty()) {
-            Toast.makeText(context, "No News Found...", Toast.LENGTH_SHORT).show()
-        } else {
-            filterList(filteredlist)
-        }
-
+        filterList(filteredList)
     }
 }

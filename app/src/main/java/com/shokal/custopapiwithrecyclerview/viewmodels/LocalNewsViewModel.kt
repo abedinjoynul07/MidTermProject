@@ -48,4 +48,10 @@ class LocalNewsViewModel(application: Application) : AndroidViewModel(applicatio
             newsRepo.deleteAllNews()
         }
     }
+
+    fun updateArticle(article: LocalArticle) {
+        viewModelScope.launch(Dispatchers.IO) {
+            newsRepo.updateArticle(article)
+        }
+    }
 }

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.Toast
@@ -45,7 +46,6 @@ class MainActivity : AppCompatActivity() {
             listArticles.addAll(it)
         }
 
-
         adapter = NewsAdapter(this, viewModel, listArticles)
         val navView: BottomNavigationView = binding.navView
 
@@ -67,22 +67,24 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_item, menu)
-        val item = menu?.findItem(R.id.actionSearch)
-        val searchView = item?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter?.serach(newText)
-                return false
-            }
-        })
-        return super.onCreateOptionsMenu(menu)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.menu_item, menu)
+//        val item = menu?.findItem(R.id.actionSearch)
+//        val searchView = item?.actionView as SearchView
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                if (newText != null) {
+//                    adapter?.filter(newText)
+//                }
+//                return false
+//            }
+//        })
+//        return super.onCreateOptionsMenu(menu)
+//    }
 
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(

@@ -44,6 +44,10 @@ class NewsRepository(context: Context) {
         return db.insertAll(article)
     }
 
+    suspend fun updateArticle(article: LocalArticle) {
+        db.update(article)
+    }
+
     // Delete user
     suspend fun deleteAllNews() {
         db.deleteAll()
