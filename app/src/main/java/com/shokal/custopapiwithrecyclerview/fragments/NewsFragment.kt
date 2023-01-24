@@ -32,7 +32,6 @@ class NewsFragment : Fragment() {
     private var allEqual = false
     private val job = Job()
     private val result = mutableListOf<LocalArticle>()
-    private var listArticles: java.util.ArrayList<LocalArticle> = ArrayList()
     private lateinit var progressBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {

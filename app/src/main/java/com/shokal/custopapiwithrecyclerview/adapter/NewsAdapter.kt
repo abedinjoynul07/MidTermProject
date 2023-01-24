@@ -20,6 +20,9 @@ import com.shokal.custopapiwithrecyclerview.models.BookMarkNews
 import com.shokal.custopapiwithrecyclerview.models.LocalArticle
 import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -97,7 +100,10 @@ class NewsAdapter(
                 news.category,
                 true
             )
-            viewModel.updateArticle(article)
+            GlobalScope.launch(Dispatchers.IO) {
+                viewModel.updateArticle(article)
+            }
+
 
             val bookmarkNews = BookMarkNews(
                 news.author,

@@ -28,8 +28,6 @@ class DataFetchWorker(appContext: Context, workerParams: WorkerParameters) :
             Timber.tag("worker").d(e)
             Result.failure()
         }
-
-
     }
 }
 

@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_homeFragment2_to_detailedNewsFragment"
             app:destination="@id/detailedNewsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
     </fragment>
     <fragment
         android:id="@+id/bookMarkFragment"
@@ -88,7 +91,7 @@
     <fragment
         android:id="@+id/webViewFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.WebViewFragment"
-        android:label="Web View"
+        android:label="Detailed Web Content"
         tools:layout="@layout/fragment_web_view">
         <action
             android:id="@+id/action_webViewFragment_to_detailedNewsFragment"
@@ -106,7 +109,7 @@
     <fragment
         android:id="@+id/detailedBookMarkNewsFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.DetailedBookMarkNewsFragment"
-        android:label="fragment_detailed_book_mark_news"
+        android:label="Detailed Content"
         tools:layout="@layout/fragment_detailed_book_mark_news">
         <action
             android:id="@+id/action_detailedBookMarkNewsFragment_to_bookMarkFragment2"
@@ -121,7 +124,7 @@
     <fragment
         android:id="@+id/bookMarkWebViewFragment"
         android:name="com.shokal.custopapiwithrecyclerview.fragments.BookMarkWebViewFragment"
-        android:label="fragment_book_mark_web_view"
+        android:label="Detailed Web Content"
         tools:layout="@layout/fragment_book_mark_web_view">
         <action
             android:id="@+id/action_bookMarkWebViewFragment_to_detailedBookMarkNewsFragment"
@@ -129,5 +132,13 @@
         <argument
             android:name="url"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment2"
+        android:name="com.shokal.custopapiwithrecyclerview.fragments.SettingsFragment"
+        android:label="SettingsFragment">
+        <action
+            android:id="@+id/action_settingsFragment2_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
