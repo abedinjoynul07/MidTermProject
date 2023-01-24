@@ -42,54 +42,57 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun getNews() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _status.postValue(NewsApiStatus.LOADING)
-            try {
-                _news.postValue(
-                    NewsApi.retrofitService.getAllNews(
-                        BuildConfig.API_KEY,
-                        "bitcoin"
-                    ).articles
-                )
-                _businessNews.postValue(
-                    NewsApi.retrofitService.getBusinessNews(
-                        BuildConfig.API_KEY, "entertainment"
-                    ).articles
-                )
-                _sportsNews.postValue(
-                    NewsApi.retrofitService.getBusinessNews(
-                        BuildConfig.API_KEY,
-                        "sports"
-                    ).articles
-                )
-                _technologyNews.postValue(
-                    NewsApi.retrofitService.getBusinessNews(
-                        BuildConfig.API_KEY, "technology"
-                    ).articles
-                )
-                _scienceNews.postValue(
-                    NewsApi.retrofitService.getBusinessNews(
-                        BuildConfig.API_KEY, "science"
-                    ).articles
-                )
-                _healthNews.postValue(
-                    NewsApi.retrofitService.getBusinessNews(
-                        BuildConfig.API_KEY, "health"
-                    ).articles
-                )
-                _status.postValue(NewsApiStatus.DONE)
+        GlobalScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
+                _status.postValue(NewsApiStatus.LOADING)
+                try {
+                    _news.postValue(
+                        NewsApi.retrofitService.getAllNews(
+                            BuildConfig.API_KEY,
+                            "bitcoin"
+                        ).articles
+                    )
+                    _businessNews.postValue(
+                        NewsApi.retrofitService.getBusinessNews(
+                            BuildConfig.API_KEY, "entertainment"
+                        ).articles
+                    )
+                    _sportsNews.postValue(
+                        NewsApi.retrofitService.getBusinessNews(
+                            BuildConfig.API_KEY,
+                            "sports"
+                        ).articles
+                    )
+                    _technologyNews.postValue(
+                        NewsApi.retrofitService.getBusinessNews(
+                            BuildConfig.API_KEY, "technology"
+                        ).articles
+                    )
+                    _scienceNews.postValue(
+                        NewsApi.retrofitService.getBusinessNews(
+                            BuildConfig.API_KEY, "science"
+                        ).articles
+                    )
+                    _healthNews.postValue(
+                        NewsApi.retrofitService.getBusinessNews(
+                            BuildConfig.API_KEY, "health"
+                        ).articles
+                    )
+                    _status.postValue(NewsApiStatus.DONE)
 
-            } catch (e: Exception) {
-                withContext(Dispatchers.IO) {
-                    _status.postValue(NewsApiStatus.ERROR)
-                    _news.postValue(listOf())
-                    _businessNews.postValue(listOf())
-                    _sportsNews.postValue(listOf())
-                    _technologyNews.postValue(listOf())
-                    _scienceNews.postValue(listOf())
-                    _healthNews.postValue(listOf())
+                } catch (e: Exception) {
+                    withContext(Dispatchers.IO) {
+                        _status.postValue(NewsApiStatus.ERROR)
+                        _news.postValue(listOf())
+                        _businessNews.postValue(listOf())
+                        _sportsNews.postValue(listOf())
+                        _technologyNews.postValue(listOf())
+                        _scienceNews.postValue(listOf())
+                        _healthNews.postValue(listOf())
+                    }
                 }
             }
         }
+
     }
 }

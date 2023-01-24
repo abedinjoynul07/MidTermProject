@@ -1,53 +1,35 @@
 package com.shokal.custopapiwithrecyclerview.workers
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
-import androidx.work.Worker
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.shokal.custopapiwithrecyclerview.fragments.NewsFragment
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import com.shokal.custopapiwithrecyclerview.BuildConfig
+import com.shokal.custopapiwithrecyclerview.fragments.autoReload
+import com.shokal.custopapiwithrecyclerview.models.Article
+import com.shokal.custopapiwithrecyclerview.models.LocalArticle
+import com.shokal.custopapiwithrecyclerview.repositories.NewsRepository
+import com.shokal.custopapiwithrecyclerview.services.NewsApi
+import kotlinx.coroutines.*
 import timber.log.Timber
 
-@HiltWorker
-class DataFetchWorker @AssistedInject constructor(
-    @Assisted appContext: Context,
-    @Assisted workerParams: WorkerParameters
-) : Worker(appContext, workerParams) {
+class DataFetchWorker(appContext: Context, workerParams: WorkerParameters) :
+    CoroutineWorker(appContext, workerParams) {
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
+        Timber.tag("worker").d("Worker Started")
         return try {
-            NewsFragment().observeData()
-//            BusinessFragment().observeData()
-//            HealthFragment().observeData()
-//            ScienceFragment().observeData()
-//            SportsFragment().observeData()
-//            TechnologyFragment().observeData()
-            Timber.tag("worker").d("doWork: Success")
+            autoReload()
+            Timber.tag("worker").d("Get Article Called ")
             Result.success()
         } catch (e: Exception) {
+            Timber.tag("worker").d(e)
             Result.failure()
         }
+
+
     }
-
-
-//    override suspend fun doWork(): Result {
-//        return try {
-//            scope.launch {
-//                withContext(IO) {
-//                    NewsFragment()
-//                    BusinessFragment().observeData()
-//                    HealthFragment().observeData()
-//                    ScienceFragment().observeData()
-//                    SportsFragment().observeData()
-//                    TechnologyFragment().observeData()
-//                }
-//            }
-//            Timber.tag("worker").d("doWork: Success")
-//            Result.success()
-//        } catch (e: Exception) {
-//            Result.failure()
-//        }
-//    }
-
 }
+

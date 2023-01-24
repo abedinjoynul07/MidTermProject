@@ -46,6 +46,9 @@ interface NewsDao {
     @Query("DELETE FROM articles")
     suspend fun deleteAll()
 
+    @Query("DELETE FROM articles where category = :category")
+    suspend fun deleteByCategory(category: String)
+
     @Delete
     suspend fun deleteBookMarKArticle(bookMarkNews: BookMarkNews)
 }

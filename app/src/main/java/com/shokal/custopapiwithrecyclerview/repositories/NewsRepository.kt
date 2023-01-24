@@ -53,6 +53,10 @@ class NewsRepository(context: Context) {
         db.deleteAll()
     }
 
+    suspend fun deleteByCategory(category: String) {
+        db.deleteByCategory(category)
+    }
+
     suspend fun deleteBookMarKArticle(bookMarkNews: BookMarkNews) {
         db.deleteBookMarKArticle(bookMarkNews)
     }

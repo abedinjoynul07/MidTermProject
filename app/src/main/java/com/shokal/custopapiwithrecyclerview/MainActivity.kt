@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,21 +35,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         checkPermission()
-
-//        val handler = Handler()
-//        val runnableCode: Runnable = object : Runnable {
-//            override fun run() {
-//                Toast.makeText(this@MainActivity, "Toast from handler", Toast.LENGTH_SHORT).show()
-//                NewsFragment()
-//                handler.postDelayed(this, 5000)
-//            }
-//        }
-//        handler.post(runnableCode)
-
         setPeriodicWorkRequest()
-
         val navView: BottomNavigationView = binding.navView
-
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -65,29 +53,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun setPeriodicWorkRequest() {
         val workManager = WorkManager.getInstance(applicationContext)
-//        val businessDataLoad = PeriodicWorkRequest
-//            .Builder(LoadBusinessData::class.java, 15, TimeUnit.MINUTES)
-//            .build()
-//
-//        val healthDataLoad = PeriodicWorkRequest
-//            .Builder(LoadHealthData::class.java, 15, TimeUnit.MINUTES)
-//            .build()
-//
-//        val newsDataLoad = PeriodicWorkRequest
-//            .Builder(DataFetchWorker::class.java, 15, TimeUnit.MINUTES)
-//            .build()
-//
-//        val scienceDataLoad = PeriodicWorkRequest
-//            .Builder(LoadScienceData::class.java, 15, TimeUnit.MINUTES)
-//            .build()
-//
-//        val sportsDataLoad = PeriodicWorkRequest
-//            .Builder(LoadSportsData::class.java, 15, TimeUnit.MINUTES)
-//            .build()
-
         val dataLoad =
-            PeriodicWorkRequest.Builder(DataFetchWorker::class.java, 15, TimeUnit.MINUTES).build()
-        workManager.enqueue(dataLoad)
+            PeriodicWorkRequest
+                .Builder(DataFetchWorker::class.java, 300, TimeUnit.MINUTES)
+                .setInitialDelay(1, TimeUnit.MINUTES)
+                .addTag("apiCall")
+                .build()
+        workManager.enqueueUniquePeriodicWork(
+            "apiCall",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            dataLoad
+        )
     }
 
     private fun checkPermission() {

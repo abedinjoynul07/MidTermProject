@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,11 +19,14 @@ import com.shokal.custopapiwithrecyclerview.viewmodels.LocalNewsViewModel
 import com.shokal.custopapiwithrecyclerview.viewmodels.NewsViewModel
 import kotlinx.coroutines.Job
 
+
+lateinit var viewModel: LocalNewsViewModel
+lateinit var apiViewModel: NewsViewModel
+
 class NewsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var refreshLayout: SwipeRefreshLayout
-    private val viewModel: LocalNewsViewModel by viewModels()
-    private val apiViewModel: NewsViewModel by viewModels()
+
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
     private var allEqual = false
@@ -34,6 +38,7 @@ class NewsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         progressBar = ProgressDialog(requireContext())
         progressBar.setCancelable(false)
         progressBar.setMessage("Fetching Data...")
@@ -45,6 +50,9 @@ class NewsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
+
+        viewModel = ViewModelProvider(this)[LocalNewsViewModel::class.java]
+        apiViewModel = ViewModelProvider(this)[NewsViewModel::class.java]
         return binding.root
     }
 
@@ -161,4 +169,9 @@ class NewsFragment : Fragment() {
             )
         }
     }
+}
+
+
+fun autoReload() {
+    apiViewModel.getNews()
 }
